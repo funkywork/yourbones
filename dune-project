@@ -21,5 +21,6 @@
   (ocaml (>= 4.14.0))
   (dune (>= 3.0.0))
   (data-encoding (>= 0.7.1))
+  preface
   (odoc :with-doc)
   (alcotest :with-test)))

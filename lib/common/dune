@@ -1,0 +1,5 @@
+(library
+ (public_name yourbones.common)
+ (name yourbones_common)
+ (modules_without_implementation interfaces)
+ (libraries data-encoding))

@@ -1,4 +1,5 @@
-(lang dune 3.0)
+(lang dune 3.2)
+(using mdx 0.3)
 
 ;; Project configuration
 (name yourbones)
@@ -24,3 +25,14 @@
   preface
   (odoc :with-doc)
   (alcotest :with-test)))
+
+(package
+ (name yourbones_ppx)
+ (synopsis "A ppx companion for Yourbones")
+ (description "Some syntax extension to deal with Tezos values")
+ (depends
+  (ocaml (>= 4.14.0))
+  (dune (>= 3.0.0))
+  (ppxlib (>= 0.29.1))
+  (yourbones (= :version))
+  (mdx (and :with-test (>= 2.0.0)))))

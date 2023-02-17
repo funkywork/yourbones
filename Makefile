@@ -35,7 +35,6 @@ lint:
 	dune build @fmt --auto-promote
 
 
-
 # Setting up the development environment
 
 .PHONY: dev-deps deps

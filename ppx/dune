@@ -1,0 +1,6 @@
+(library
+ (name yourbones_ppx)
+ (public_name yourbones_ppx)
+ (libraries ppxlib yourbones.common)
+ (ppx_runtime_libraries yourbones.common)
+ (kind ppx_rewriter))

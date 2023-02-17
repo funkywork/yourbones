@@ -31,6 +31,9 @@
 (** A type that describes a [tez], expressed in [nanotez].*)
 type t
 
+(** An exception used to lift [tez_error] into an exception. *)
+exception Tez_exception of Interfaces.tez_error
+
 (** {1 Misc} *)
 
 (** returns the "ꜩ" caracter. *)
@@ -55,6 +58,9 @@ val pp
   -> t
   -> unit
 
+(** Pretty-printer with suffix *)
+val pp_print : Format.formatter -> t -> unit
+
 (** [to_mutez x] returns the result as [int64] in [mutez]. *)
 val to_mutez : t -> int64
 
@@ -67,6 +73,9 @@ val from_mutez
        | `Tez_invalid_multiplicator of int64
        ] )
      result
+
+(** [from_mutez' x] is an exceptionful version of [from_mutez]. *)
+val from_mutez' : int64 -> t
 
 (** [to_int64 x] cast [x] into an [int64]. *)
 val to_int64 : t -> int64

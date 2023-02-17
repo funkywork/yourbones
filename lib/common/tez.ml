@@ -22,6 +22,8 @@
 
 type t = Int64.t
 
+exception Tez_exception of Interfaces.tez_error
+
 let symbol = "ꜩ"
 let zero = 0L
 
@@ -110,6 +112,12 @@ let to_int64 x = x
 let to_mutez x = Micro.truncate x
 let from_mutez x = Micro.from_int64 x
 
+let from_mutez' x =
+  match Micro.from_int64 x with
+  | Ok x -> x
+  | Error err -> raise (Tez_exception err)
+;;
+
 module Infix = struct
   let ( = ) x y = Int64.equal x y
   let ( <> ) x y = not (x = y)
@@ -165,6 +173,11 @@ let pp ?(floating_part = `Six) () ppf value =
     let divider = Micro.one in
     let right = Int64.div (Int64.rem value one) divider in
     Format.fprintf ppf "%Li.%06Li" left right
+;;
+
+let pp_print ppf value =
+  let pp = pp ~floating_part:`Six () in
+  Format.fprintf ppf "%a%s" pp value symbol
 ;;
 
 let decimal_part_from_string full_repr decimal =

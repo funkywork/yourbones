@@ -20,8 +20,31 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-let () =
-  List.iter
-    (fun (name, rules) -> Ppxlib.Driver.register_transformation name ~rules)
-    [ Tez_literal.register ]
-;;
+(** Generate a compile-time error*)
+val fail_with : ('a, Format.formatter, unit, Ppxlib.expression) format4 -> 'a
+
+(** Building module path using Infix operators.contents The usual way is to do
+    that: [~:"Mod1" >> "Mod2" >> "foo"] to define the path [Mod1.Mod2.foo]. *)
+
+val ( ~: ) : string -> Ppxlib.longident
+val ( >> ) : Ppxlib.longident -> string -> Ppxlib.longident
+
+(** Converts a [longident] into an [expression]. *)
+val make_ident : Ppxlib.longident -> Ppxlib.expression
+
+(** [application f_ident parameters] will produce a function application of
+    [f_ident] with the list of given parameters. *)
+val application
+  :  Ppxlib.longident
+  -> Ppxlib.expression list
+  -> Ppxlib.expression
+
+(** Build an expander with the default location. *)
+val expander_with_default_location : ('a -> 'b) -> Ppxlib.location -> 'a -> 'b
+
+(** Build a constant rule expander (suffix in literal values) using default
+    location (relay on [expander_with_default_location]). *)
+val constant_rule
+  :  char
+  -> (string -> Ppxlib.expression)
+  -> Ppxlib.Context_free.Rule.t

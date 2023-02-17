@@ -20,8 +20,36 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-let () =
-  List.iter
-    (fun (name, rules) -> Ppxlib.Driver.register_transformation name ~rules)
-    [ Tez_literal.register ]
+open Yourbones_common
+open Ppxlib
+open Ast_helper
+
+let from_mutez_repr value =
+  let mutez = Tez.to_int64 value in
+  let path = Util.(~:"Yourbones_common" >> "Tez" >> "from_mutez'") in
+  Util.application path [ mutez |> Const.int64 |> Exp.constant ]
+;;
+
+let fail_with_error kind str err =
+  Util.fail_with
+    {|"%s" projection into %s fails with %a|}
+    str
+    kind
+    Tez.pp_error
+    err
+;;
+
+let from_string kind f str =
+  match Int64.of_string_opt str with
+  | None -> Util.fail_with {|"%s" is not a valid %s representation|} str kind
+  | Some value ->
+    Result.fold ~ok:from_mutez_repr ~error:(fail_with_error kind str) (f value)
+;;
+
+let mutez = from_string "mutez" Tez.Micro.from_int64
+let tez = from_string "tez" Tez.from_int64
+
+let register =
+  ( "yourbones_ppx.tez_literal"
+  , Util.[ constant_rule 'm' mutez; constant_rule 't' tez ] )
 ;;

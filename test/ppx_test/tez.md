@@ -24,13 +24,13 @@ impossible to describe negative amounts or too large amounts!
 ```ocaml
 # -123m ;;
 Line 1, characters 1-6:
-Error: "-123" projection into microtez fail with `Tez_negative_amount (-123)
+Error: "-123" projection into mutez fails with `Tez_negative_amount (-123)
 ```
 
 ```ocaml
 # 9223372036854775807t
 Line 1, characters 1-21:
-Error: "9223372036854775807" projection into tez fail with `Tez_overflow
+Error: "9223372036854775807" projection into tez fails with `Tez_overflow
 ```
 
 In general, literal values are used to define constants, especially for

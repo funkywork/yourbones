@@ -20,8 +20,4 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-let () =
-  List.iter
-    (fun (name, rules) -> Ppxlib.Driver.register_transformation name ~rules)
-    [ Tez_literal.register ]
-;;
+val register : string * Ppxlib.Context_free.Rule.t list

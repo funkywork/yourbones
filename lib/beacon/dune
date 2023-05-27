@@ -1,0 +1,4 @@
+(library
+ (public_name yourbones_js-beacon)
+ (name beacon)
+ (libraries lwt preface nightmare_js))

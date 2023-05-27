@@ -1,4 +1,8 @@
 (library
  (public_name yourbones_js-beacon)
  (name beacon)
- (libraries lwt preface nightmare_js))
+ (libraries lwt preface nightmare_js)
+ (modes byte)
+ (js_of_ocaml
+  (javascript_files stubs/stubs.js))
+ (preprocess (pps js_of_ocaml-ppx)))

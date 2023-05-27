@@ -55,3 +55,10 @@ pinned-deps: local-deps
 
 # [make deps] will fetch the local and the pinned deps.
 deps: pinned-deps dev-deps
+
+# build stubs
+
+.PHONY: js_stubs
+
+js_stubs:
+	(cd lib/beacon/stubs; npm install; npm run build)

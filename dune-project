@@ -19,7 +19,7 @@
  (synopsis "A companion library for writing applications on Tezos")
  (description "A companion library for writing dApps in OCaml that should fit with Nightmare")
  (depends
-  (ocaml (>= 4.14.0))
+  (ocaml (>= 5.0.0))
   (dune (>= 3.0.0))
   (data-encoding (>= 0.7.1))
   preface
@@ -31,7 +31,7 @@
  (synopsis "A ppx companion for Yourbones")
  (description "Some syntax extension to deal with Tezos values")
  (depends
-  (ocaml (>= 4.14.0))
+  (ocaml (>= 5.0.0))
   (dune (>= 3.0.0))
   (ppxlib (>= 0.29.1))
   (yourbones (= :version))

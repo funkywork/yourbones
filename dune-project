@@ -23,6 +23,7 @@
   (dune (>= 3.0.0))
   (data-encoding (>= 0.7.1))
   preface
+  (nightmare :pinned)
   (odoc :with-doc)
   (alcotest :with-test)))
 
@@ -36,3 +37,17 @@
   (ppxlib (>= 0.29.1))
   (yourbones (= :version))
   (mdx (and :with-test (>= 2.0.0)))))
+
+(package
+  (name yourbones_js-beacon)
+  (synopsis "A very opinionated binding of Beacon-SDK in Js_of_OCaml")
+  (description "An attempt to progressively link the Beacon SDK (TZIP-10) to interact with Wallets in a dApp")
+  (depends
+   (ocaml (>= 5.0.0))
+   (dune (>= 3.0.0))
+   (lwt (>= 5.6.1))
+   (preface (>= 1.0.0))
+   (js_of_ocaml-compiler (>= 5.2.0))
+   (js_of_ocaml-ppx (>= 5.2.0))
+   (js_of_ocaml-lwt (>= 5.2.0))
+   (nightmare_js :pinned)))

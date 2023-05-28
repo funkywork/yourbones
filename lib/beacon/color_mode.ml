@@ -20,8 +20,26 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+open Js_of_ocaml
 
-module Tez = Tez
-module Network = Network
+type t =
+  | Light
+  | Dark
+
+let to_string = function
+  | Light -> "light"
+  | Dark -> "dark"
+;;
+
+let from_string str =
+  match Util.normalize str with
+  | "light" -> Some Light
+  | "dark" -> Some Dark
+  | _ -> None
+;;
+
+let as_optional_parameter parameter =
+  let open Preface.Fun.Infix in
+  let open Nightmare_js.Option in
+  Js.string % to_string <$> parameter |> to_optdef
+;;

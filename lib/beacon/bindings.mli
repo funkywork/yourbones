@@ -83,6 +83,37 @@ class type account_info =
     method notification : notification t or_undefined readonly_prop
   end
 
+class type request_permission_input =
+  object
+    method network : network t or_undefined readonly_prop
+    method scopes : permission_scope t js_array t or_undefined readonly_prop
+  end
+
+class type app_metadata =
+  object
+    method senderId : js_string t readonly_prop
+    method name : js_string t readonly_prop
+    method icon : js_string t or_undefined readonly_prop
+  end
+
+class type beacon_base_message =
+  object
+    method version : js_string t readonly_prop
+    method _id : js_string t readonly_prop
+    method senderId : js_string t readonly_prop
+  end
+
+class type permission_response =
+  object
+    inherit beacon_base_message
+    method appMetadata : app_metadata t readonly_prop
+    method publicKey : js_string t readonly_prop
+    method network : network t readonly_prop
+    method scopes : permission_scope t js_array t readonly_prop
+    method threshold : threshold t or_undefined readonly_prop
+    method notification : notification t or_undefined readonly_prop
+  end
+
 (** {1 DAppClient}
 
     Bindings for
@@ -90,14 +121,16 @@ class type account_info =
 
 class type dapp_client_options =
   object
+    method name : js_string t readonly_prop
     method appUrl : js_string t or_undefined readonly_prop
     method colorMode : color_mode t or_undefined readonly_prop
     method disableDefaultEvents : bool t or_undefined readonly_prop
     method disclaimerText : js_string t or_undefined readonly_prop
     method iconUrl : js_string t or_undefined readonly_prop
     method matrixNodes : js_string t js_array t or_undefined readonly_prop
-    method name : js_string t readonly_prop
+    method description : js_string t or_undefined readonly_prop
     method preferredNetwork : network_type t or_undefined readonly_prop
+    method featuredWallets : js_string t js_array t or_undefined readonly_prop
 
     (* FIXME: Unsupported features. *)
     (* method eventHandlers : event_handlers t or_undefined readonly_prop *)
@@ -114,4 +147,10 @@ class type dapp_client =
     method checkPermissions : js_string t -> bool t Promise.t meth
     method clearActiveAccount : unit Promise.t meth
     method destroy : unit Promise.t meth
+
+    method getAccount :
+      js_string t -> account_info t or_undefined Promise.t meth
+
+    method getAccounts : account_info t js_array t Promise.t meth
+    method getActiveAccount : account_info t or_undefined Promise.t meth
   end

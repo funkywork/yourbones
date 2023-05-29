@@ -20,25 +20,25 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** Describes a network by type, potential name and potential rpc server
-    address.*)
-
 open Js_of_ocaml
 
 type t =
-  { type_ : Yourbones_common.network_type
-  ; name : string option
-  ; rpc_url : string option
+  { version : string
+  ; id : string
+  ; sender_id : string
   }
 
-val from_js : Bindings.network Js.t -> t
-val to_js : t -> Bindings.network Js.t
+let from_js message =
+  let version = Js.to_string message##.version in
+  let id = Js.to_string message##._id in
+  let sender_id = Js.to_string message##.senderId in
+  { version; id; sender_id }
+;;
 
-(** {1 Networks list} *)
-
-val custom : name:string -> rpc_url:string -> t
-val mainnet : ?name:string -> ?rpc_url:string -> unit -> t
-val mondaynet : ?name:string -> ?rpc_url:string -> unit -> t
-val dailynet : ?name:string -> ?rpc_url:string -> unit -> t
-val ghostnet : ?name:string -> ?rpc_url:string -> unit -> t
-val nairobinet : ?name:string -> ?rpc_url:string -> unit -> t
+let to_js { version; id; sender_id } =
+  object%js
+    val version = Js.string version
+    val _id = Js.string id
+    val senderId = Js.string sender_id
+  end
+;;

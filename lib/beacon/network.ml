@@ -52,3 +52,35 @@ let to_js { type_; rpc_url; name } =
     val _type = type_ |> Network.Type.to_string |> Js.string
   end
 ;;
+
+let custom ~name ~rpc_url =
+  let type_ = Yourbones_common.Network.Type.Custom in
+  let name = Some name in
+  let rpc_url = Some rpc_url in
+  { type_; name; rpc_url }
+;;
+
+let mainnet ?name ?rpc_url () =
+  let type_ = Yourbones_common.Network.Type.Mainnet in
+  { type_; name; rpc_url }
+;;
+
+let mondaynet ?name ?rpc_url () =
+  let type_ = Yourbones_common.Network.Type.Mondaynet in
+  { type_; name; rpc_url }
+;;
+
+let dailynet ?name ?rpc_url () =
+  let type_ = Yourbones_common.Network.Type.Dailynet in
+  { type_; name; rpc_url }
+;;
+
+let ghostnet ?name ?rpc_url () =
+  let type_ = Yourbones_common.Network.Type.Ghostnet in
+  { type_; name; rpc_url }
+;;
+
+let nairobinet ?name ?rpc_url () =
+  let type_ = Yourbones_common.Network.Type.Nairobinet in
+  { type_; name; rpc_url }
+;;

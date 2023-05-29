@@ -45,6 +45,8 @@ val make
   -> ?icon_url:string
   -> ?matrix_nodes:string list
   -> ?preferred_network:Yourbones_common.network_type
+  -> ?description:string
+  -> ?featured_wallets:string list
   -> name:string
   -> unit
   -> t
@@ -73,3 +75,15 @@ val clear_active_account : t -> unit Lwt.t
 
 (** [destroy client] returns a promise that erases all client information. *)
 val destroy : t -> unit Lwt.t
+
+(** [get_account client account_identifier] returns a promise that try to reach
+    an account by the [account_identifier]. *)
+val get_account : t -> string -> Account_info.t option Lwt.t
+
+(** [get_accounts client] returns a promise that get the list of all locally
+    knowns accounts. *)
+val get_accounts : t -> Account_info.t list Lwt.t
+
+(** [get_active_account client] returns a promise that get the current active
+    account. *)
+val get_active_account : t -> Account_info.t option Lwt.t

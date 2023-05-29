@@ -37,6 +37,8 @@ let make_options
   ?icon_url
   ?matrix_nodes
   ?preferred_network
+  ?description
+  ?featured_wallets
   ~name
   ()
   : Bindings.dapp_client_options Js.t
@@ -50,6 +52,10 @@ let make_options
     val disclaimerText = Js.string <$> disclaimer_text |> to_optdef
     val iconUrl = Js.string <$> icon_url |> to_optdef
     val name = Js.string name
+    val description = Js.string <$> description |> to_optdef
+
+    val featuredWallets =
+      Util.list_to_js_with Js.string <$> featured_wallets |> to_optdef
 
     val preferredNetwork =
       Js.string % Network.Type.to_string <$> preferred_network |> to_optdef
@@ -67,6 +73,8 @@ let make
   ?icon_url
   ?matrix_nodes
   ?preferred_network
+  ?description
+  ?featured_wallets
   ~name
   ()
   =
@@ -79,6 +87,8 @@ let make
       ?icon_url
       ?matrix_nodes
       ?preferred_network
+      ?description
+      ?featured_wallets
       ~name
       ()
   in
@@ -112,3 +122,27 @@ let check_permissions client message =
 
 let clear_active_account client = client##clearActiveAccount |> Promise.as_lwt
 let destroy client = client##destroy |> Promise.as_lwt
+
+let to_account_info potential_account =
+  let open Undefinable in
+  Account_info.from_js <$> potential_account |> to_option
+;;
+
+let get_account client identifier =
+  let open Lwt.Syntax in
+  let identifier_str = Js.string identifier in
+  let+ account = client##getAccount identifier_str |> Promise.as_lwt in
+  to_account_info account
+;;
+
+let get_accounts client =
+  let open Lwt.Syntax in
+  let+ accounts = client##getAccounts |> Promise.as_lwt in
+  Util.list_from_js_with Account_info.from_js accounts
+;;
+
+let get_active_account client =
+  let open Lwt.Syntax in
+  let+ account = client##getActiveAccount |> Promise.as_lwt in
+  to_account_info account
+;;

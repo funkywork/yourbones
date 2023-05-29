@@ -20,25 +20,27 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** Describes a network by type, potential name and potential rpc server
-    address.*)
-
 open Js_of_ocaml
 
 type t =
-  { type_ : Yourbones_common.network_type
-  ; name : string option
-  ; rpc_url : string option
+  { sender_id : string
+  ; name : string
+  ; icon : string option
   }
 
-val from_js : Bindings.network Js.t -> t
-val to_js : t -> Bindings.network Js.t
+let from_js metadata =
+  let open Nightmare_js.Undefinable in
+  let sender_id = Js.to_string metadata##.senderId in
+  let name = Js.to_string metadata##.name in
+  let icon = Js.to_string <$> metadata##.icon |> to_option in
+  { sender_id; name; icon }
+;;
 
-(** {1 Networks list} *)
-
-val custom : name:string -> rpc_url:string -> t
-val mainnet : ?name:string -> ?rpc_url:string -> unit -> t
-val mondaynet : ?name:string -> ?rpc_url:string -> unit -> t
-val dailynet : ?name:string -> ?rpc_url:string -> unit -> t
-val ghostnet : ?name:string -> ?rpc_url:string -> unit -> t
-val nairobinet : ?name:string -> ?rpc_url:string -> unit -> t
+let to_js { sender_id; name; icon } =
+  let open Nightmare_js.Option in
+  object%js
+    val senderId = Js.string sender_id
+    val name = Js.string name
+    val icon = Js.string <$> icon |> to_optdef
+  end
+;;

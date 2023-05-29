@@ -20,25 +20,18 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** Describes a network by type, potential name and potential rpc server
-    address.*)
+(** Minimum representation of a Beacon message.
+
+    The [type] field is deliberately omitted in order to build explicit
+    discriminants, driven by types. *)
 
 open Js_of_ocaml
 
 type t =
-  { type_ : Yourbones_common.network_type
-  ; name : string option
-  ; rpc_url : string option
+  { version : string
+  ; id : string
+  ; sender_id : string
   }
 
-val from_js : Bindings.network Js.t -> t
-val to_js : t -> Bindings.network Js.t
-
-(** {1 Networks list} *)
-
-val custom : name:string -> rpc_url:string -> t
-val mainnet : ?name:string -> ?rpc_url:string -> unit -> t
-val mondaynet : ?name:string -> ?rpc_url:string -> unit -> t
-val dailynet : ?name:string -> ?rpc_url:string -> unit -> t
-val ghostnet : ?name:string -> ?rpc_url:string -> unit -> t
-val nairobinet : ?name:string -> ?rpc_url:string -> unit -> t
+val from_js : #Bindings.beacon_base_message Js.t -> t
+val to_js : t -> Bindings.beacon_base_message Js.t

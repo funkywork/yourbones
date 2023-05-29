@@ -6,4 +6,4 @@
  (modules_without_implementation bindings)
  (js_of_ocaml
   (javascript_files stubs/stubs.js))
- (preprocess (pps js_of_ocaml-ppx)))
+ (preprocess (pps js_of_ocaml-ppx yourbones_ppx)))

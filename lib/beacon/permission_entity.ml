@@ -22,57 +22,34 @@
 
 open Js_of_ocaml
 
-let normalize str = String.(trim @@ lowercase_ascii str)
+type t =
+  { address : string
+  ; network : Network.t
+  ; scopes : Permission_scope.t list
+  ; threshold : Threshold.t option
+  }
 
-let array_to_js_with f arr =
-  let array = new%js Js.array_empty in
-  let () =
-    Array.fold_left
-      (fun () x ->
-        let _ = array##push (f x) in
-        ())
-      ()
-      arr
+let from_js permission_entity =
+  let open Nightmare_js.Undefinable in
+  let address = Js.to_string permission_entity##.address in
+  let network = Network.from_js permission_entity##.network in
+  let scopes = Permission_scope.from_js_array permission_entity##.scopes in
+  let threshold =
+    Threshold.from_js <$> permission_entity##.threshold |> to_option
   in
-  array
+  { address; network; scopes; threshold }
 ;;
 
-let array_to_js arr = Js.array arr
+let to_js { address; network; scopes; threshold } =
+  let open Preface.Fun.Infix in
+  let open Nightmare_js.Option in
+  object%js
+    val address = Js.string address
+    val network = Network.to_js network
 
-let list_to_js_with f list =
-  let array = new%js Js.array_empty in
-  let () =
-    List.fold_left
-      (fun () x ->
-        let _ = array##push (f x) in
-        ())
-      ()
-      list
-  in
-  array
+    val scopes =
+      Util.list_to_js_with (Js.string % Permission_scope.to_string) scopes
+
+    val threshold = Threshold.to_js <$> threshold |> to_optdef
+  end
 ;;
-
-let list_to_js list = list_to_js_with (fun x -> x) list
-
-let array_from_js_with f arr =
-  let length = arr##.length in
-  Array.init length (fun i ->
-    match Js.array_get arr i |> Js.Optdef.to_option with
-    | Some x -> f x
-    | None -> (* unreacheable *) assert false)
-;;
-
-let array_from_js arr = Js.to_array arr
-
-let list_from_js_with f arr =
-  let length = arr##.length in
-  List.init length (fun i ->
-    match Js.array_get arr i |> Js.Optdef.to_option with
-    | Some x -> f x
-    | None -> (* unreacheable *) assert false)
-;;
-
-let list_from_js arr = list_from_js_with (fun x -> x) arr
-
-module List_option =
-  Preface.List.Applicative.Traversable (Preface.Option.Applicative)

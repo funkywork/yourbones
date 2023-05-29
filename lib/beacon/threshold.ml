@@ -22,57 +22,31 @@
 
 open Js_of_ocaml
 
-let normalize str = String.(trim @@ lowercase_ascii str)
+type t =
+  { amount : Yourbones_common.Tez.t
+  ; timeframe : int64
+  }
 
-let array_to_js_with f arr =
-  let array = new%js Js.array_empty in
-  let () =
-    Array.fold_left
-      (fun () x ->
-        let _ = array##push (f x) in
-        ())
-      ()
-      arr
+let from_js threshold =
+  let open Yourbones_common in
+  let amount =
+    match Js.to_string threshold##.amount |> Tez.from_string with
+    | Ok x -> x
+    | Error _ -> 1000m
   in
-  array
-;;
-
-let array_to_js arr = Js.array arr
-
-let list_to_js_with f list =
-  let array = new%js Js.array_empty in
-  let () =
-    List.fold_left
-      (fun () x ->
-        let _ = array##push (f x) in
-        ())
-      ()
-      list
+  let timeframe =
+    match Js.to_string threshold##.timeframe |> Int64.of_string_opt with
+    | None -> 3600L
+    | Some x -> x
   in
-  array
+  { amount; timeframe }
 ;;
 
-let list_to_js list = list_to_js_with (fun x -> x) list
+let to_js { amount; timeframe } =
+  object%js
+    val amount =
+      Format.asprintf "%a" (Yourbones_common.Tez.pp ()) amount |> Js.string
 
-let array_from_js_with f arr =
-  let length = arr##.length in
-  Array.init length (fun i ->
-    match Js.array_get arr i |> Js.Optdef.to_option with
-    | Some x -> f x
-    | None -> (* unreacheable *) assert false)
+    val timeframe = Int64.to_string timeframe |> Js.string
+  end
 ;;
-
-let array_from_js arr = Js.to_array arr
-
-let list_from_js_with f arr =
-  let length = arr##.length in
-  List.init length (fun i ->
-    match Js.array_get arr i |> Js.Optdef.to_option with
-    | Some x -> f x
-    | None -> (* unreacheable *) assert false)
-;;
-
-let list_from_js arr = list_from_js_with (fun x -> x) arr
-
-module List_option =
-  Preface.List.Applicative.Traversable (Preface.Option.Applicative)

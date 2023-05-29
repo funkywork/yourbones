@@ -59,5 +59,17 @@ val beacon_id : t -> string Lwt.t
     promise for a given [client]. *)
 val connection_status : t -> Transport_status.t Lwt.t
 
-(** [ready client] a promise that awaits that the client is ready. *)
+(** [ready client] returns a promise that awaits that the client is ready. *)
 val ready : t -> unit Lwt.t
+
+(** [check_permissions client message] returns a promise that check if we have
+    permissions to send the specific message type to the active account. If no
+    active account is set, only permission requests are allowed.. *)
+val check_permissions : t -> Message_type.t -> bool Lwt.t
+
+(** [clear_active_account client] returns a promise that clear the active
+    account.*)
+val clear_active_account : t -> unit Lwt.t
+
+(** [destroy client] returns a promise that erases all client information. *)
+val destroy : t -> unit Lwt.t

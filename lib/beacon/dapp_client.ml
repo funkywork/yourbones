@@ -102,3 +102,13 @@ let connection_status client =
 ;;
 
 let ready client = client##.ready |> Promise.as_lwt
+
+let check_permissions client message =
+  let open Lwt.Syntax in
+  let message_str = message |> Message_type.to_string |> Js.string in
+  let+ result = client##checkPermissions message_str |> Promise.as_lwt in
+  Js.to_bool result
+;;
+
+let clear_active_account client = client##clearActiveAccount |> Promise.as_lwt
+let destroy client = client##destroy |> Promise.as_lwt

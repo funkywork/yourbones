@@ -28,6 +28,61 @@ open Js_of_ocaml
 open Js
 open Nightmare_js
 
+(** {1 Intermediate representation} *)
+
+type permission_scope = js_string
+type network_type = js_string
+type color_mode = js_string
+type connection_status = js_string
+type mutez = js_string
+type timeframe = js_string
+type origin_kind = js_string
+
+class type network =
+  object
+    method _type : network_type t readonly_prop
+    method name : js_string t or_undefined readonly_prop
+    method rpcUrl : js_string t or_undefined readonly_prop
+  end
+
+class type threshold =
+  object
+    method amount : mutez t readonly_prop
+    method timeframe : timeframe t readonly_prop
+  end
+
+class type permission_entity =
+  object
+    method address : js_string t readonly_prop
+    method network : network t readonly_prop
+    method scopes : permission_scope t js_array t readonly_prop
+    method threshold : threshold t or_undefined readonly_prop
+  end
+
+class type origin =
+  object
+    method _type : origin_kind t readonly_prop
+    method id : js_string t readonly_prop
+  end
+
+class type notification =
+  object
+    method version : int readonly_prop
+    method apiUrl : js_string t readonly_prop
+    method token : js_string t readonly_prop
+  end
+
+class type account_info =
+  object
+    inherit permission_entity
+    method accountIdentifier : js_string t readonly_prop
+    method senderId : js_string t readonly_prop
+    method origin : origin t readonly_prop
+    method walletKey : js_string t or_undefined readonly_prop
+    method connectedAt : int readonly_prop
+    method notification : notification t or_undefined readonly_prop
+  end
+
 (** {1 DAppClient}
 
     Bindings for
@@ -36,13 +91,13 @@ open Nightmare_js
 class type dapp_client_options =
   object
     method appUrl : js_string t or_undefined readonly_prop
-    method colorMode : js_string t or_undefined readonly_prop
+    method colorMode : color_mode t or_undefined readonly_prop
     method disableDefaultEvents : bool t or_undefined readonly_prop
     method disclaimerText : js_string t or_undefined readonly_prop
     method iconUrl : js_string t or_undefined readonly_prop
     method matrixNodes : js_string t js_array t or_undefined readonly_prop
     method name : js_string t readonly_prop
-    method preferredNetwork : js_string t or_undefined readonly_prop
+    method preferredNetwork : network_type t or_undefined readonly_prop
 
     (* FIXME: Unsupported features. *)
     (* method eventHandlers : event_handlers t or_undefined readonly_prop *)
@@ -54,6 +109,9 @@ class type dapp_client =
   object
     inherit dapp_client_options
     method beaconId : js_string t Promise.t readonly_prop
-    method connectionStatus : js_string t Promise.t readonly_prop
+    method connectionStatus : connection_status t Promise.t readonly_prop
     method ready : unit Promise.t readonly_prop
+    method checkPermissions : js_string t -> bool t Promise.t meth
+    method clearActiveAccount : unit Promise.t meth
+    method destroy : unit Promise.t meth
   end

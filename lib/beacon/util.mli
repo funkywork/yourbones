@@ -58,3 +58,10 @@ val list_from_js_with : ('a -> 'b) -> 'a Js.js_array Js.t -> 'b list
 
 (** [list_from_js arr] converts a javascript Array ([arr]) into an OCaml List. *)
 val list_from_js : 'a Js.js_array Js.t -> 'a list
+
+(** {1 Option util} *)
+
+module List_option :
+  Preface.Specs.TRAVERSABLE
+    with type 'a t = 'a option
+     and type 'a iter = 'a list

@@ -114,6 +114,14 @@ class type permission_response =
     method notification : notification t or_undefined readonly_prop
   end
 
+class type permission_response_output =
+  object
+    inherit permission_response
+    method address : js_string t readonly_prop
+    method accountInfo : account_info t readonly_prop
+    method walletKey : js_string t or_undefined readonly_prop
+  end
+
 (** {1 DAppClient}
 
     Bindings for
@@ -153,4 +161,8 @@ class type dapp_client =
 
     method getAccounts : account_info t js_array t Promise.t meth
     method getActiveAccount : account_info t or_undefined Promise.t meth
+
+    method requestPermissions :
+      request_permission_input t or_undefined
+      -> permission_response_output t Promise.t meth
   end

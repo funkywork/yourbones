@@ -87,3 +87,13 @@ val get_accounts : t -> Account_info.t list Lwt.t
 (** [get_active_account client] returns a promise that get the current active
     account. *)
 val get_active_account : t -> Account_info.t option Lwt.t
+
+(** [request_permissions ?network ?scopes client] send a permission request to
+    the DApp. This should be done as the first step. The wallet will respond
+    with an publicKey and permissions that were given. The account returned will
+    be set as the "activeAccount" and will be used for the following requests.*)
+val request_permissions
+  :  ?network:Network.t
+  -> ?scopes:Permission_scope.t list
+  -> t
+  -> Permission_response_output.t Lwt.t

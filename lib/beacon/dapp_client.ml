@@ -24,7 +24,6 @@
 
 open Js_of_ocaml
 open Nightmare_js
-open Yourbones_common
 
 type t = Bindings.dapp_client Js.t
 type constr = (Bindings.dapp_client_options Js.t -> t) Js.constr
@@ -58,7 +57,9 @@ let make_options
       Util.list_to_js_with Js.string <$> featured_wallets |> to_optdef
 
     val preferredNetwork =
-      Js.string % Network.Type.to_string <$> preferred_network |> to_optdef
+      Js.string % Yourbones_common.Network.Type.to_string
+      <$> preferred_network
+      |> to_optdef
 
     val matrixNodes =
       Util.list_to_js_with Js.string <$> matrix_nodes |> to_optdef
@@ -145,4 +146,26 @@ let get_active_account client =
   let open Lwt.Syntax in
   let+ account = client##getActiveAccount |> Promise.as_lwt in
   to_account_info account
+;;
+
+let request_permissions ?network ?scopes client =
+  let input : Bindings.request_permission_input Js.t or_undefined =
+    match network, scopes with
+    | None, None -> Undefinable.empty
+    | _ ->
+      let open Option in
+      let open Preface.Fun.Infix in
+      Undefinable.fill
+        (object%js
+           val network = Network.to_js <$> network |> to_optdef
+
+           val scopes =
+             Util.list_to_js_with (Js.string % Permission_scope.to_string)
+             <$> scopes
+             |> to_optdef
+        end)
+  in
+  let open Lwt.Syntax in
+  let+ output = client##requestPermissions input |> Promise.as_lwt in
+  Permission_response_output.from_js output
 ;;

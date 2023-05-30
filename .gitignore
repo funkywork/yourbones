@@ -14,6 +14,11 @@ _build/
 # ocamlbuild targets
 *.byte
 *.native
+*.bc.js
+*.bc-for-jsoo
+
+#FIXME: should be fixed with linking
+*_stubs.js
 
 # oasis generated files
 setup.data

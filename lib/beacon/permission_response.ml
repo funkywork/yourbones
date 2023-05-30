@@ -26,7 +26,7 @@ type t =
   { version : string
   ; id : string
   ; sender_id : string
-  ; app_metadata : App_metadata.t
+  ; app_metadata : App_metadata.t option
   ; public_key : string
   ; network : Network.t
   ; scopes : Permission_scope.t list
@@ -39,7 +39,9 @@ let from_js response =
     Beacon_base_message.from_js response
   in
   let open Nightmare_js.Undefinable in
-  let app_metadata = App_metadata.from_js response##.appMetadata in
+  let app_metadata =
+    App_metadata.from_js <$> response##.appMetadata |> to_option
+  in
   let public_key = Js.to_string response##.publicKey in
   let network = Network.from_js response##.network in
   let scopes = Permission_scope.from_js_array response##.scopes in
@@ -79,7 +81,7 @@ let to_js
     val version = obj##.version
     val _id = obj##._id
     val senderId = obj##.senderId
-    val appMetadata = App_metadata.to_js app_metadata
+    val appMetadata = App_metadata.to_js <$> app_metadata |> to_optdef
     val publicKey = Js.string public_key
     val network = Network.to_js network
 

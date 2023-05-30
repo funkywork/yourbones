@@ -28,7 +28,7 @@ type t =
   { version : string
   ; id : string
   ; sender_id : string
-  ; app_metadata : App_metadata.t
+  ; app_metadata : App_metadata.t option
   ; public_key : string
   ; network : Network.t
   ; scopes : Permission_scope.t list

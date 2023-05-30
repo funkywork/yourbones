@@ -106,7 +106,7 @@ class type beacon_base_message =
 class type permission_response =
   object
     inherit beacon_base_message
-    method appMetadata : app_metadata t readonly_prop
+    method appMetadata : app_metadata t or_undefined readonly_prop
     method publicKey : js_string t readonly_prop
     method network : network t readonly_prop
     method scopes : permission_scope t js_array t readonly_prop

@@ -4,7 +4,7 @@
   "description": "Stubs that need to be included into the yourbones_js-beacon runtime",
   "main": "raw_stubs.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,10 @@
   },
   "homepage": "https://github.com/funkywork/yourbones#readme",
   "devDependencies": {
+    "@babel/core": "^7.22.1",
+    "@babel/preset-env": "^7.22.4",
     "assert": "^2.0.0",
+    "babel-loader": "^9.1.2",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
     "https-browserify": "^1.0.0",

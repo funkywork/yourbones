@@ -20,8 +20,15 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** An object describing some information about the application's metadata. *)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+
+type t =
+  { sender_id : string
+  ; name : string
+  ; icon : string option
+  }
+
+val from_js : Bindings.app_metadata Js.t -> t
+val to_js : t -> Bindings.app_metadata Js.t

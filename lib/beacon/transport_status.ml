@@ -20,8 +20,21 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+type t =
+  | Connected
+  | Connecting
+  | Not_connected
 
-module Tez = Tez
-module Network = Network
+let to_string = function
+  | Connected -> "CONNECTED"
+  | Connecting -> "CONNECTING"
+  | Not_connected -> "NOT_CONNECTED"
+;;
+
+let from_string str =
+  match Util.normalize str with
+  | "connected" -> Some Connected
+  | "connecting" -> Some Connecting
+  | "not_connected" -> Some Not_connected
+  | _ -> None
+;;

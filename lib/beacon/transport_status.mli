@@ -20,8 +20,12 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Describes the status of the client connection. *)
 
-module Tez = Tez
-module Network = Network
+type t =
+  | Connected
+  | Connecting
+  | Not_connected
+
+val to_string : t -> string
+val from_string : string -> t option

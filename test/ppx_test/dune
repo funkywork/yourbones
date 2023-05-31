@@ -1,3 +1,5 @@
 (mdx
- (deps (package yourbones) (package yourbones_ppx))
+ (deps
+  (package yourbones)
+  (package yourbones_ppx))
  (preludes prelude.ml))

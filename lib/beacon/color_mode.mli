@@ -20,8 +20,15 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Describes the colour mode of the DApp client. *)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+open Nightmare_js
+
+type t =
+  | Light
+  | Dark
+
+val to_string : t -> string
+val from_string : string -> t option
+val as_optional_parameter : t option -> Js.js_string Js.t or_undefined

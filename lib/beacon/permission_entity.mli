@@ -20,8 +20,16 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Abstraction over an entity that can handle permissions. *)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+
+type t =
+  { address : string
+  ; network : Network.t
+  ; scopes : Permission_scope.t list
+  ; threshold : Threshold.t option
+  }
+
+val from_js : #Bindings.permission_entity Js.t -> t
+val to_js : t -> Bindings.permission_entity Js.t

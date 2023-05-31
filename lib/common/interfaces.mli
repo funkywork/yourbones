@@ -21,8 +21,9 @@
     SOFTWARE. *)
 
 (** Generalization of signatures in the manner of the method described in this
-    article: {{:https://www.craigfe.io/posts/generalised-signatures} Generalised
-    signatures}. *)
+    article:
+    {{:https://www.craigfe.io/posts/generalised-signatures} Generalised
+      signatures}. *)
 
 (** {1 Numerical signatures}
 

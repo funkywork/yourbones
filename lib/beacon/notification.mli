@@ -20,8 +20,16 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Finding the right documentation header can be laborious when the "low-level"
+    library is poorly documented... *)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+
+type t =
+  { version : int
+  ; api_url : string
+  ; token : string
+  }
+
+val from_js : Bindings.notification Js.t -> t
+val to_js : t -> Bindings.notification Js.t

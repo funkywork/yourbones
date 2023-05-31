@@ -20,8 +20,18 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Minimum representation of a Beacon message.
 
-module Tez = Tez
-module Network = Network
+    The [type] field is deliberately omitted in order to build explicit
+    discriminants, driven by types. *)
+
+open Js_of_ocaml
+
+type t =
+  { version : string
+  ; id : string
+  ; sender_id : string
+  }
+
+val from_js : #Bindings.beacon_base_message Js.t -> t
+val to_js : t -> Bindings.beacon_base_message Js.t

@@ -20,8 +20,17 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Permissions granted to a client. *)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+
+type t =
+  | Sign
+  | Operation_request
+  | Encrypt
+  | Notification
+  | Threshold
+
+val to_string : t -> string
+val from_string : string -> t option
+val from_js_array : Bindings.permission_scope Js.t Js.js_array Js.t -> t list

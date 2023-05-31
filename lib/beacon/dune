@@ -1,0 +1,11 @@
+(library
+ (public_name yourbones_js-beacon)
+ (name beacon)
+ (libraries lwt preface yourbones.common nightmare_js)
+ (modes byte)
+ (modules_without_implementation bindings)
+ ;; FIXME: find a way to include stubs.js
+ ; (js_of_ocaml
+ ;  (javascript_files stubs/beacon_stubs.js))
+ (preprocess
+  (pps js_of_ocaml-ppx yourbones_ppx)))

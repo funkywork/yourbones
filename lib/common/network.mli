@@ -20,8 +20,29 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Describe a Tezos network (attached to a node) and its protocol type. *)
 
-module Tez = Tez
-module Network = Network
+module Type : sig
+  (** Describes a node's network type. *)
+
+  type t =
+    | Custom
+    | Delphinet
+    | Edonet
+    | Florencenet
+    | Granadanet
+    | Hangzhounet
+    | Ithacanet
+    | Jakartanet
+    | Kathmandunet
+    | Limanet
+    | Mumbainet
+    | Nairobinet
+    | Dailynet
+    | Mondaynet
+    | Ghostnet
+    | Mainnet
+
+  val to_string : t -> string
+  val from_string : string -> t option
+end

@@ -20,8 +20,21 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** An object describing a permissions response. *)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+
+type t =
+  { version : string
+  ; id : string
+  ; sender_id : string
+  ; app_metadata : App_metadata.t option
+  ; public_key : string
+  ; network : Network.t
+  ; scopes : Permission_scope.t list
+  ; threshold : Threshold.t option
+  ; notification : Notification.t option
+  }
+
+val from_js : #Bindings.permission_response Js.t -> t
+val to_js : t -> Bindings.permission_response Js.t

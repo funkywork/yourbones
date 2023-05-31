@@ -20,8 +20,36 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+open Js_of_ocaml
 
-module Tez = Tez
-module Network = Network
+type t =
+  { address : string
+  ; network : Network.t
+  ; scopes : Permission_scope.t list
+  ; threshold : Threshold.t option
+  }
+
+let from_js permission_entity =
+  let open Nightmare_js.Undefinable in
+  let address = Js.to_string permission_entity##.address in
+  let network = Network.from_js permission_entity##.network in
+  let scopes = Permission_scope.from_js_array permission_entity##.scopes in
+  let threshold =
+    Threshold.from_js <$> permission_entity##.threshold |> to_option
+  in
+  { address; network; scopes; threshold }
+;;
+
+let to_js { address; network; scopes; threshold } =
+  let open Preface.Fun.Infix in
+  let open Nightmare_js.Option in
+  object%js
+    val address = Js.string address
+    val network = Network.to_js network
+
+    val scopes =
+      Util.list_to_js_with (Js.string % Permission_scope.to_string) scopes
+
+    val threshold = Threshold.to_js <$> threshold |> to_optdef
+  end
+;;

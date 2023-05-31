@@ -20,8 +20,25 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+open Js_of_ocaml
 
-module Tez = Tez
-module Network = Network
+type t =
+  { version : string
+  ; id : string
+  ; sender_id : string
+  }
+
+let from_js message =
+  let version = Js.to_string message##.version in
+  let id = Js.to_string message##._id in
+  let sender_id = Js.to_string message##.senderId in
+  { version; id; sender_id }
+;;
+
+let to_js { version; id; sender_id } =
+  object%js
+    val version = Js.string version
+    val _id = Js.string id
+    val senderId = Js.string sender_id
+  end
+;;

@@ -20,8 +20,37 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+open Js_of_ocaml
 
-module Tez = Tez
-module Network = Network
+type t =
+  | Sign
+  | Operation_request
+  | Encrypt
+  | Notification
+  | Threshold
+
+let to_string = function
+  | Sign -> "sign"
+  | Operation_request -> "operation_request"
+  | Encrypt -> "encrypt"
+  | Notification -> "notification"
+  | Threshold -> "threshold"
+;;
+
+let from_string str =
+  match Util.normalize str with
+  | "sign" -> Some Sign
+  | "operation_request" -> Some Operation_request
+  | "encrypt" -> Some Encrypt
+  | "notification" -> Some Notification
+  | "threshold" -> Some Threshold
+  | _ -> None
+;;
+
+let from_js_array js_array =
+  let open Preface.Fun.Infix in
+  js_array
+  |> Util.list_from_js_with (from_string % Js.to_string)
+  |> Util.List_option.sequence
+  |> Option.value ~default:[]
+;;

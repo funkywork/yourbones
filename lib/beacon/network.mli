@@ -20,8 +20,25 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Describes a network by type, potential name and potential rpc server
+    address.*)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+
+type t =
+  { type_ : Yourbones_common.network_type
+  ; name : string option
+  ; rpc_url : string option
+  }
+
+val from_js : Bindings.network Js.t -> t
+val to_js : t -> Bindings.network Js.t
+
+(** {1 Networks list} *)
+
+val custom : name:string -> rpc_url:string -> t
+val mainnet : ?name:string -> ?rpc_url:string -> unit -> t
+val mondaynet : ?name:string -> ?rpc_url:string -> unit -> t
+val dailynet : ?name:string -> ?rpc_url:string -> unit -> t
+val ghostnet : ?name:string -> ?rpc_url:string -> unit -> t
+val nairobinet : ?name:string -> ?rpc_url:string -> unit -> t

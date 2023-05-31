@@ -1,0 +1,11 @@
+(executable
+ (name main)
+ (modes js)
+ (preprocess
+  (pps js_of_ocaml-ppx yourbones_ppx))
+ (js_of_ocaml
+  (flags :standard))
+ (promote
+  (until-clean)
+  (only main.bc.js))
+ (libraries yourbones.common yourbones_js-beacon))

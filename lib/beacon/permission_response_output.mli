@@ -20,8 +20,24 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** The result of a permissions request (to link a Wallet to Beacon). *)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+
+type t =
+  { version : string
+  ; id : string
+  ; sender_id : string
+  ; app_metadata : App_metadata.t option
+  ; public_key : string
+  ; network : Network.t
+  ; scopes : Permission_scope.t list
+  ; threshold : Threshold.t option
+  ; notification : Notification.t option
+  ; address : string
+  ; account_info : Account_info.t
+  ; wallet_key : string option
+  }
+
+val from_js : Bindings.permission_response_output Js.t -> t
+val to_js : t -> Bindings.permission_response_output Js.t

@@ -20,8 +20,27 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+open Js_of_ocaml
 
-module Tez = Tez
-module Network = Network
+type t =
+  { sender_id : string
+  ; name : string
+  ; icon : string option
+  }
+
+let from_js metadata =
+  let open Nightmare_js.Undefinable in
+  let sender_id = Js.to_string metadata##.senderId in
+  let name = Js.to_string metadata##.name in
+  let icon = Js.to_string <$> metadata##.icon |> to_option in
+  { sender_id; name; icon }
+;;
+
+let to_js { sender_id; name; icon } =
+  let open Nightmare_js.Option in
+  object%js
+    val senderId = Js.string sender_id
+    val name = Js.string name
+    val icon = Js.string <$> icon |> to_optdef
+  end
+;;

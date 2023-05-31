@@ -20,8 +20,20 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Describes the transactions allocated to the wallet from Beacon. *)
 
-module Tez = Tez
-module Network = Network
+type t =
+  | Acknowledge
+  | BroadcastRequest
+  | BroadcastResponse
+  | Disconnect
+  | Error
+  | OperationRequest
+  | OperationResponse
+  | PermissionRequest
+  | PermissionResponse
+  | SignPayloadRequest
+  | SignPayloadResponse
+
+val to_string : t -> string
+val from_string : string -> t option

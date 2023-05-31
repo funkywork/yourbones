@@ -20,8 +20,20 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Describes the origin of the connection with a Wallet. *)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+
+type kind =
+  | Website
+  | Extension
+  | P2p
+  | Walletconnect
+
+type t =
+  { type_ : kind
+  ; id : string
+  }
+
+val from_js : Bindings.origin Js.t -> t
+val to_js : t -> Bindings.origin Js.t

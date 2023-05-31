@@ -20,8 +20,16 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** Wallets can define a threshold and report it back to the app. The wallet
+    needs to define an amount and a timeframe. For security reasons, no data is
+    allowed (no contract calls).*)
 
-module Tez = Tez
-module Network = Network
+open Js_of_ocaml
+
+type t =
+  { amount : Yourbones_common.Tez.t
+  ; timeframe : int64
+  }
+
+val from_js : Bindings.threshold Js.t -> t
+val to_js : t -> Bindings.threshold Js.t

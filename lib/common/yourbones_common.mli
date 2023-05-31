@@ -30,8 +30,12 @@
     Exposes all recurring types that are often used (such as [tez]). *)
 
 type tez = Tez.t
+type network_type = Network.Type.t
 
-(** {1 Modules} *)
+(** {1 Tezos related modules} *)
 
-module Interfaces = Interfaces
 module Tez = Tez
+
+(** {1 Node related modules} *)
+
+module Network = Network

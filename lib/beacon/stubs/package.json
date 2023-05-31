@@ -1,0 +1,46 @@
+{
+  "name": "yourbones_js-beacon_stubs",
+  "version": "1.0.0",
+  "description": "Stubs that need to be included into the yourbones_js-beacon runtime",
+  "main": "raw_stubs.js",
+  "scripts": {
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/funkywork/yourbones.git"
+  },
+  "keywords": [
+    "tezos",
+    "nightmare",
+    "ocaml",
+    "beacon",
+    "web3"
+  ],
+  "author": "Funkywork",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/funkywork/yourbones/issues"
+  },
+  "homepage": "https://github.com/funkywork/yourbones#readme",
+  "devDependencies": {
+    "@babel/core": "^7.22.1",
+    "@babel/preset-env": "^7.22.4",
+    "assert": "^2.0.0",
+    "babel-loader": "^9.1.2",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.0",
+    "webpack": "^5.84.1",
+    "webpack-cli": "^5.1.1"
+  },
+  "dependencies": {
+    "@airgap/beacon-sdk": "^4.0.4"
+  }
+}

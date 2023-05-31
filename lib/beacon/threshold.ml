@@ -20,8 +20,33 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+open Js_of_ocaml
 
-module Tez = Tez
-module Network = Network
+type t =
+  { amount : Yourbones_common.Tez.t
+  ; timeframe : int64
+  }
+
+let from_js threshold =
+  let open Yourbones_common in
+  let amount =
+    match Js.to_string threshold##.amount |> Tez.from_string with
+    | Ok x -> x
+    | Error _ -> 1000m
+  in
+  let timeframe =
+    match Js.to_string threshold##.timeframe |> Int64.of_string_opt with
+    | None -> 3600L
+    | Some x -> x
+  in
+  { amount; timeframe }
+;;
+
+let to_js { amount; timeframe } =
+  object%js
+    val amount =
+      Format.asprintf "%a" (Yourbones_common.Tez.pp ()) amount |> Js.string
+
+    val timeframe = Int64.to_string timeframe |> Js.string
+  end
+;;

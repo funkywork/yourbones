@@ -1,5 +1,5 @@
 .PHONY: all test build clean check-lint lint doc utop
-.PHONY: pinned-deps dev-deps local-deps
+
 
 all: build
 
@@ -37,7 +37,7 @@ lint:
 
 # Setting up the development environment
 
-.PHONY: dev-deps deps
+.PHONY: dev-deps local-deps pinned-deps deps
 
 # [make dev-deps] will download locally the dependencies needed
 # to develop the project. Mainly formatting features, and IDE support.
@@ -50,9 +50,17 @@ dev-deps:
 local-deps:
 	opam install . --deps-only --with-doc --with-test -y
 
-# [make pinned-deps] will download locally the pinned dependencies needed.
 pinned-deps: local-deps
-	opam pin add nightmare --dev-repo git+https://github.com/funkywork/nightmare.git -y
+	opam install nightmare nightmare_js -y
 
 # [make deps] will fetch the local and the pinned deps.
-deps: pinned-deps
+deps: pinned-deps dev-deps
+
+# build stubs
+
+.PHONY: js_stubs
+
+js_stubs:
+	(cd lib/beacon/stubs; npm install; npm run build)
+	# FIXME: Awaiting for linking runtime beacon_stubs
+	cp lib/beacon/stubs/beacon_stubs.js examples/bin/beacon_stubs.js

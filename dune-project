@@ -28,7 +28,7 @@
   (alcotest :with-test)))
 
 (package
- (name yourbones_ppx)
+ (name yourbones-ppx)
  (synopsis "A ppx companion for Yourbones")
  (description "Some syntax extension to deal with Tezos values")
  (depends

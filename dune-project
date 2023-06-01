@@ -1,5 +1,5 @@
-(lang dune 3.2)
-(using mdx 0.3)
+(lang dune 3.8)
+(using mdx 0.4)
 
 ;; Project configuration
 (name yourbones)

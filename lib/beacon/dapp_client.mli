@@ -44,7 +44,7 @@ val make
   -> ?disclaimer_text:string
   -> ?icon_url:string
   -> ?matrix_nodes:string list
-  -> ?preferred_network:Yourbones_common.network_type
+  -> ?preferred_network:Yourbones.network_type
   -> ?description:string
   -> ?featured_wallets:string list
   -> name:string

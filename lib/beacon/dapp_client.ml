@@ -57,7 +57,7 @@ let make_options
       Util.list_to_js_with Js.string <$> featured_wallets |> to_optdef
 
     val preferredNetwork =
-      Js.string % Yourbones_common.Network.Type.to_string
+      Js.string % Yourbones.Network.Type.to_string
       <$> preferred_network
       |> to_optdef
 

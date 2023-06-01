@@ -27,7 +27,7 @@
 open Js_of_ocaml
 
 type t =
-  { amount : Yourbones_common.Tez.t
+  { amount : Yourbones.Tez.t
   ; timeframe : int64
   }
 

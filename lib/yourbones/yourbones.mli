@@ -20,8 +20,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** the [Yourbones_common] module exposes all backend agnostic tools (e.g. as a
-    node, to build an indexer or JavaScript to build the front-end of a dApp).
+(** the [Yourbones] module exposes all backend agnostic tools (e.g. as a node,
+    to build an indexer or JavaScript to build the front-end of a dApp).
 
     It is mainly used to describe data to interact with the chain. *)
 

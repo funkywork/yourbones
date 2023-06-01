@@ -20,13 +20,13 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-open Yourbones_common
+open Yourbones
 open Ppxlib
 open Ast_helper
 
 let from_mutez_repr value =
   let mutez = Tez.to_int64 value in
-  let path = Util.(~:"Yourbones_common" >> "Tez" >> "from_mutez'") in
+  let path = Util.(~:"Yourbones" >> "Tez" >> "from_mutez'") in
   Util.application path [ mutez |> Const.int64 |> Exp.constant ]
 ;;
 

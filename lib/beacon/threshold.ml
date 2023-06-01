@@ -23,12 +23,12 @@
 open Js_of_ocaml
 
 type t =
-  { amount : Yourbones_common.Tez.t
+  { amount : Yourbones.Tez.t
   ; timeframe : int64
   }
 
 let from_js threshold =
-  let open Yourbones_common in
+  let open Yourbones in
   let amount =
     match Js.to_string threshold##.amount |> Tez.from_string with
     | Ok x -> x
@@ -44,9 +44,7 @@ let from_js threshold =
 
 let to_js { amount; timeframe } =
   object%js
-    val amount =
-      Format.asprintf "%a" (Yourbones_common.Tez.pp ()) amount |> Js.string
-
+    val amount = Format.asprintf "%a" (Yourbones.Tez.pp ()) amount |> Js.string
     val timeframe = Int64.to_string timeframe |> Js.string
   end
 ;;

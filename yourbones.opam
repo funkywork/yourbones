@@ -11,7 +11,7 @@ homepage: "https://github.com/funkywork/yourbones"
 bug-reports: "https://github.com/funkywork/yourbones/issues"
 depends: [
   "ocaml" {>= "5.0.0"}
-  "dune" {>= "3.2" & >= "3.0.0"}
+  "dune" {>= "3.8" & >= "3.0.0"}
   "data-encoding" {>= "0.7.1"}
   "preface"
   "nightmare" {pinned}
@@ -33,3 +33,7 @@ build: [
   ]
 ]
 dev-repo: "git+https://github.com/funkywork/yourbones.git"
+pin-depends: [
+  ["nightmare.dev" "git+https://github.com/funkywork/nightmare.git"]
+  ["nightmare_js.dev" "git+https://github.com/funkywork/nightmare.git"]
+]

@@ -24,7 +24,7 @@ open Js_of_ocaml
 open Nightmare_js
 
 type t =
-  { type_ : Yourbones_common.network_type
+  { type_ : Yourbones.network_type
   ; name : string option
   ; rpc_url : string option
   }
@@ -34,7 +34,7 @@ let from_js network =
   let name = Js.to_string <$> network##.name |> to_option in
   let rpc_url = Js.to_string <$> network##.rpcUrl |> to_option in
   let type_ =
-    let open Yourbones_common in
+    let open Yourbones in
     network##._type
     |> Js.to_string
     |> Network.Type.from_string
@@ -44,7 +44,7 @@ let from_js network =
 ;;
 
 let to_js { type_; rpc_url; name } =
-  let open Yourbones_common in
+  let open Yourbones in
   let open Option in
   object%js
     val name = Js.string <$> name |> to_optdef
@@ -54,33 +54,33 @@ let to_js { type_; rpc_url; name } =
 ;;
 
 let custom ~name ~rpc_url =
-  let type_ = Yourbones_common.Network.Type.Custom in
+  let type_ = Yourbones.Network.Type.Custom in
   let name = Some name in
   let rpc_url = Some rpc_url in
   { type_; name; rpc_url }
 ;;
 
 let mainnet ?name ?rpc_url () =
-  let type_ = Yourbones_common.Network.Type.Mainnet in
+  let type_ = Yourbones.Network.Type.Mainnet in
   { type_; name; rpc_url }
 ;;
 
 let mondaynet ?name ?rpc_url () =
-  let type_ = Yourbones_common.Network.Type.Mondaynet in
+  let type_ = Yourbones.Network.Type.Mondaynet in
   { type_; name; rpc_url }
 ;;
 
 let dailynet ?name ?rpc_url () =
-  let type_ = Yourbones_common.Network.Type.Dailynet in
+  let type_ = Yourbones.Network.Type.Dailynet in
   { type_; name; rpc_url }
 ;;
 
 let ghostnet ?name ?rpc_url () =
-  let type_ = Yourbones_common.Network.Type.Ghostnet in
+  let type_ = Yourbones.Network.Type.Ghostnet in
   { type_; name; rpc_url }
 ;;
 
 let nairobinet ?name ?rpc_url () =
-  let type_ = Yourbones_common.Network.Type.Nairobinet in
+  let type_ = Yourbones.Network.Type.Nairobinet in
   { type_; name; rpc_url }
 ;;

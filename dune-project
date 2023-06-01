@@ -1,5 +1,5 @@
-(lang dune 3.2)
-(using mdx 0.3)
+(lang dune 3.8)
+(using mdx 0.4)
 
 ;; Project configuration
 (name yourbones)
@@ -28,7 +28,7 @@
   (alcotest :with-test)))
 
 (package
- (name yourbones_ppx)
+ (name yourbones-ppx)
  (synopsis "A ppx companion for Yourbones")
  (description "Some syntax extension to deal with Tezos values")
  (depends

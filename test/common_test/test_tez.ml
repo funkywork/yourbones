@@ -20,7 +20,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-open Yourbones_common
+open Yourbones
 open Nightmare_test
 
 let tez_testable = Alcotest.testable (Tez.pp ()) Tez.equal

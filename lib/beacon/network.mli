@@ -26,7 +26,7 @@
 open Js_of_ocaml
 
 type t =
-  { type_ : Yourbones_common.network_type
+  { type_ : Yourbones.network_type
   ; name : string option
   ; rpc_url : string option
   }

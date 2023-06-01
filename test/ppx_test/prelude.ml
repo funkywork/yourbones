@@ -1,9 +1,7 @@
-#use "topfind"
+[@@@ocamlformat "disable=true"];;
+#use "topfind";;
+#require "yourbones";;
+#require "yourbones-ppx";;
+#install_printer Yourbones.Tez.pp_print;;
 
-#require "yourbones"
-
-#require "yourbones_ppx"
-
-#install_printer Yourbones_common.Tez.pp_print
-
-open Yourbones_common
+open Yourbones

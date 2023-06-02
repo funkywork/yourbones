@@ -23,7 +23,7 @@
 open Js_of_ocaml
 
 type t =
-  { address : string
+  { address : Yourbones.Address.kind Yourbones.Address.t
   ; network : Network.t
   ; scopes : Permission_scope.t list
   ; threshold : Threshold.t option

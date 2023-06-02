@@ -20,23 +20,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** the [Yourbones] module exposes all backend agnostic tools (e.g. as a node,
-    to build an indexer or JavaScript to build the front-end of a dApp).
+(** The presence of an [mli] file may seem a bit excessive, but it is mainly to
+    quickly identify unused tests. *)
 
-    It is mainly used to describe data to interact with the chain. *)
-
-(** {1 Common types}
-
-    Exposes all recurring types that are often used (such as [tez]). *)
-
-type tez = Tez.t
-type network_type = Network.Type.t
-
-(** {1 Tezos related modules} *)
-
-module Tez = Tez
-module Address = Address
-
-(** {1 Node related modules} *)
-
-module Network = Network
+(** List of all test-cases. *)
+val cases : string * unit Alcotest.test_case list

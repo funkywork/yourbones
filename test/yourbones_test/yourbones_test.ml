@@ -20,4 +20,4 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-let () = Alcotest.run "Yourbones.Common" [ Test_tez.cases ]
+let () = Alcotest.run "Yourbones.Common" [ Test_tez.cases; Test_address.cases ]

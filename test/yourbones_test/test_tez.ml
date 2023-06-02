@@ -27,13 +27,7 @@ let tez_testable = Alcotest.testable (Tez.pp ()) Tez.equal
 let tez_error_testable = Alcotest.testable Tez.pp_error Tez.equal_error
 
 module Result = Preface.Result.Monad (struct
-  type t =
-    [ `Tez_negative_amount of int64
-    | `Tez_overflow
-    | `Tez_invalid_string_representation of string
-    | `Tez_invalid_multiplicator of int64
-    | `Tez_invalid_divisor of int64
-    ]
+  type t = Tez.error
 end)
 
 let test_from_int_1 =

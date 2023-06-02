@@ -22,7 +22,10 @@
   (ocaml (>= 5.0.0))
   (dune (>= 3.0.0))
   (data-encoding (>= 0.7.1))
+  (digestif (>= 1.1.0))
   preface
+  zarith
+  tezos-base58
   (nightmare :pinned)
   (odoc :with-doc)
   (alcotest :with-test)))
@@ -50,4 +53,6 @@
    (js_of_ocaml-compiler (>= 5.2.0))
    (js_of_ocaml-ppx (>= 5.2.0))
    (js_of_ocaml-lwt (>= 5.2.0))
-   (nightmare_js :pinned)))
+   zarith_stubs_js
+   (nightmare_js :pinned)
+   (yourbones (= :version))))

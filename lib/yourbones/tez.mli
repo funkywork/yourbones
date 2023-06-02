@@ -31,8 +31,17 @@
 (** A type that describes a [tez], expressed in [nanotez].*)
 type t
 
+(** Errors related to Tez. *)
+type error =
+  [ `Tez_negative_amount of int64
+  | `Tez_overflow
+  | `Tez_invalid_string_representation of string
+  | `Tez_invalid_multiplicator of int64
+  | `Tez_invalid_divisor of int64
+  ]
+
 (** An exception used to lift [tez_error] into an exception. *)
-exception Tez_exception of Interfaces.tez_error
+exception Tez_exception of error
 
 (** {1 Misc} *)
 
@@ -188,58 +197,37 @@ module Infix : sig
       However, it is likely that such operations are rarely useful... *)
 
   (** [x |+ y] is [x + y] where [x] is wrapped into a result. *)
-  val ( |+ )
-    :  (t, (Interfaces.tez_error as 'err)) result
-    -> t
-    -> (t, 'err) result
+  val ( |+ ) : (t, (error as 'err)) result -> t -> (t, 'err) result
 
   (** [x +| y] is [x + y] where [y] is wrapped into a result. *)
-  val ( +| )
-    :  t
-    -> (t, (Interfaces.tez_error as 'err)) result
-    -> (t, 'err) result
+  val ( +| ) : t -> (t, (error as 'err)) result -> (t, 'err) result
 
   (** [x |+| y] is [x + y] where [x] and [y] are wrapped into a result. *)
   val ( |+| )
-    :  (t, (Interfaces.tez_error as 'err)) result
+    :  (t, (error as 'err)) result
     -> (t, 'err) result
     -> (t, 'err) result
 
   (** [x |- y] is [x - y] where [x] is wrapped into a result. *)
-  val ( |- )
-    :  (t, (Interfaces.tez_error as 'err)) result
-    -> t
-    -> (t, 'err) result
+  val ( |- ) : (t, (error as 'err)) result -> t -> (t, 'err) result
 
   (** [x -| y] is [x - y] where [y] is wrapped into a result. *)
-  val ( -| )
-    :  t
-    -> (t, (Interfaces.tez_error as 'err)) result
-    -> (t, 'err) result
+  val ( -| ) : t -> (t, (error as 'err)) result -> (t, 'err) result
 
   (** [x |-| y] is [x - y] where [x] and [y] are wrapped into a result. *)
   val ( |-| )
-    :  (t, (Interfaces.tez_error as 'err)) result
+    :  (t, (error as 'err)) result
     -> (t, 'err) result
     -> (t, 'err) result
 
   (** [x |* y] is [x * y] where [x] is wrapped into a result. *)
-  val ( |* )
-    :  (t, (Interfaces.tez_error as 'err)) result
-    -> int64
-    -> (t, 'err) result
+  val ( |* ) : (t, (error as 'err)) result -> int64 -> (t, 'err) result
 
   (** [x *| y] is [x * y] where [y] is wrapped into a result. *)
-  val ( *| )
-    :  int64
-    -> (t, (Interfaces.tez_error as 'err)) result
-    -> (t, 'err) result
+  val ( *| ) : int64 -> (t, (error as 'err)) result -> (t, 'err) result
 
   (** [x |/ y] is [x / y] where [x] is wrapped into a result. *)
-  val ( |/ )
-    :  (t, (Interfaces.tez_error as 'err)) result
-    -> t
-    -> (t, 'err) result
+  val ( |/ ) : (t, (error as 'err)) result -> t -> (t, 'err) result
 end
 
 include module type of Infix (** @inline *)
@@ -247,7 +235,7 @@ include module type of Infix (** @inline *)
 (** {1 Error handling} *)
 
 (** Pretty printer for errors. *)
-val pp_error : Format.formatter -> Interfaces.tez_error -> unit
+val pp_error : Format.formatter -> error -> unit
 
 (** Equality between errors. *)
-val equal_error : (Interfaces.tez_error as 'err) -> 'err -> bool
+val equal_error : error -> error -> bool

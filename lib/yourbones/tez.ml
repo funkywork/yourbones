@@ -22,7 +22,15 @@
 
 type t = Int64.t
 
-exception Tez_exception of Interfaces.tez_error
+type error =
+  [ `Tez_negative_amount of int64
+  | `Tez_overflow
+  | `Tez_invalid_string_representation of string
+  | `Tez_invalid_multiplicator of int64
+  | `Tez_invalid_divisor of int64
+  ]
+
+exception Tez_exception of error
 
 let symbol = "ꜩ"
 let zero = 0L

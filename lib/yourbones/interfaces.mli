@@ -30,15 +30,6 @@
     A set of signatures that deal with the processing of numerical numbers (e.g.
     [tez], or natural numbers). *)
 
-(** Errors for [Tez] operation. *)
-type tez_error =
-  [ `Tez_negative_amount of int64
-  | `Tez_overflow
-  | `Tez_invalid_string_representation of string
-  | `Tez_invalid_multiplicator of int64
-  | `Tez_invalid_divisor of int64
-  ]
-
 module type TEZ = sig
   (** A common interface to manage the different representations of [tez]
       ([microtez] and [nanotez]). *)

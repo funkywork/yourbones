@@ -23,5 +23,5 @@
 let () =
   List.iter
     (fun (name, rules) -> Ppxlib.Driver.register_transformation name ~rules)
-    [ Tez_literal.register ]
+    [ Tez_literal.register; Address_literal.register ]
 ;;

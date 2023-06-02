@@ -21,7 +21,10 @@
     SOFTWARE. *)
 
 (** Generate a compile-time error*)
-val fail_with : ('a, Format.formatter, unit, Ppxlib.expression) format4 -> 'a
+val fail_with
+  :  ?location:Ppxlib.location
+  -> ('a, Format.formatter, unit, Ppxlib.expression) format4
+  -> 'a
 
 (** Building module path using Infix operators.contents The usual way is to do
     that: [~:"Mod1" >> "Mod2" >> "foo"] to define the path [Mod1.Mod2.foo]. *)

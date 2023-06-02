@@ -27,11 +27,13 @@ open Ast_helper
 let from_mutez_repr value =
   let mutez = Tez.to_int64 value in
   let path = Util.(~:"Yourbones" >> "Tez" >> "from_mutez'") in
-  Util.application path [ mutez |> Const.int64 |> Exp.constant ]
+  let value = mutez |> Const.int64 |> Exp.constant in
+  Util.application path [ value ]
 ;;
 
-let fail_with_error kind str err =
+let fail_with_error ?location kind str err =
   Util.fail_with
+    ?location
     {|"%s" projection into %s fails with %a|}
     str
     kind

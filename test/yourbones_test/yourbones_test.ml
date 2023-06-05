@@ -20,41 +20,4 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-open Ppxlib
-open Ast_helper
-
-let fail_with ?location ppf =
-  Format.kasprintf
-    (fun message ->
-      let location = Option.value ~default:!default_loc location in
-      let error = Location.Error.make ~loc:location message ~sub:[] in
-      let extension = Location.Error.to_extension error in
-      Exp.extension ~loc:location extension)
-    ppf
-;;
-
-let ( ~: ) x = Lident x
-let ( >> ) x y = Ldot (x, y)
-
-let make_ident longident =
-  let loc = !default_loc
-  and txt = longident in
-  Exp.ident { loc; txt }
-;;
-
-let application fun_ident parameters =
-  Exp.apply
-    (make_ident fun_ident)
-    (List.map (fun parameter -> Asttypes.Nolabel, parameter) parameters)
-;;
-
-let expander_with_default_location transformation location str =
-  with_default_loc location (fun () -> transformation str)
-;;
-
-let constant_rule char transformation =
-  Context_free.Rule.constant
-    Integer
-    char
-    (expander_with_default_location transformation)
-;;
+let () = Alcotest.run "Yourbones.Common" [ Test_tez.cases; Test_address.cases ]

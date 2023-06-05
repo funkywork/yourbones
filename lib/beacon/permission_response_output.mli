@@ -34,7 +34,7 @@ type t =
   ; scopes : Permission_scope.t list
   ; threshold : Threshold.t option
   ; notification : Notification.t option
-  ; address : string
+  ; address : Yourbones.Address.t
   ; account_info : Account_info.t
   ; wallet_key : string option
   }

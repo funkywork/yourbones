@@ -23,7 +23,7 @@
 open Js_of_ocaml
 
 type t =
-  { address : string
+  { address : Yourbones.Address.t
   ; network : Network.t
   ; scopes : Permission_scope.t list
   ; threshold : Threshold.t option
@@ -31,7 +31,9 @@ type t =
 
 let from_js permission_entity =
   let open Nightmare_js.Undefinable in
-  let address = Js.to_string permission_entity##.address in
+  let address =
+    Js.to_string permission_entity##.address |> Yourbones.Address.from_string'
+  in
   let network = Network.from_js permission_entity##.network in
   let scopes = Permission_scope.from_js_array permission_entity##.scopes in
   let threshold =
@@ -44,7 +46,7 @@ let to_js { address; network; scopes; threshold } =
   let open Preface.Fun.Infix in
   let open Nightmare_js.Option in
   object%js
-    val address = Js.string address
+    val address = Js.string (address |> Yourbones.Address.to_string)
     val network = Network.to_js network
 
     val scopes =

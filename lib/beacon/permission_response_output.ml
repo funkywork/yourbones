@@ -32,7 +32,7 @@ type t =
   ; scopes : Permission_scope.t list
   ; threshold : Threshold.t option
   ; notification : Notification.t option
-  ; address : string
+  ; address : Yourbones.Address.t
   ; account_info : Account_info.t
   ; wallet_key : string option
   }
@@ -53,7 +53,9 @@ let from_js response =
     Permission_response.from_js response
   in
   let open Nightmare_js.Undefinable in
-  let address = Js.to_string response##.address in
+  let address =
+    Js.to_string response##.address |> Yourbones.Address.from_string'
+  in
   let account_info = Account_info.from_js response##.accountInfo in
   let wallet_key = Js.to_string <$> response##.walletKey |> to_option in
   { version
@@ -111,7 +113,7 @@ let to_js
     val scopes = obj##.scopes
     val threshold = obj##.threshold
     val notification = obj##.notification
-    val address = Js.string address
+    val address = Js.string (address |> Yourbones.Address.to_string)
     val accountInfo = Account_info.to_js account_info
     val walletKey = Js.string <$> wallet_key |> to_optdef
   end

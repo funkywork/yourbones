@@ -17,7 +17,9 @@ depends: [
   "js_of_ocaml-compiler" {>= "5.2.0"}
   "js_of_ocaml-ppx" {>= "5.2.0"}
   "js_of_ocaml-lwt" {>= "5.2.0"}
+  "zarith_stubs_js"
   "nightmare_js" {pinned}
+  "yourbones" {= version}
   "odoc" {with-doc}
 ]
 build: [

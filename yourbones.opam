@@ -13,7 +13,10 @@ depends: [
   "ocaml" {>= "5.0.0"}
   "dune" {>= "3.8" & >= "3.0.0"}
   "data-encoding" {>= "0.7.1"}
+  "digestif" {>= "1.1.0"}
   "preface"
+  "zarith"
+  "tezos-base58"
   "nightmare" {pinned}
   "odoc" {with-doc}
   "alcotest" {with-test}

@@ -20,41 +20,43 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-open Ppxlib
-open Ast_helper
+(** A representation of a Tezos address. *)
 
-let fail_with ?location ppf =
-  Format.kasprintf
-    (fun message ->
-      let location = Option.value ~default:!default_loc location in
-      let error = Location.Error.make ~loc:location message ~sub:[] in
-      let extension = Location.Error.to_extension error in
-      Exp.extension ~loc:location extension)
-    ppf
-;;
+(** {1 Types} *)
 
-let ( ~: ) x = Lident x
-let ( >> ) x y = Ldot (x, y)
+(** An address is a string encoded in base58..*)
+type t
 
-let make_ident longident =
-  let loc = !default_loc
-  and txt = longident in
-  Exp.ident { loc; txt }
-;;
+(** Errors related to Address. *)
+type error =
+  [ `Address_invalid_prefix of string
+  | `Address_invalid_checksum of string
+  | `Address_invalid_length of string
+  ]
 
-let application fun_ident parameters =
-  Exp.apply
-    (make_ident fun_ident)
-    (List.map (fun parameter -> Asttypes.Nolabel, parameter) parameters)
-;;
+(** An exception used to lift [error] into an exception. *)
+exception Address_exception of error
 
-let expander_with_default_location transformation location str =
-  with_default_loc location (fun () -> transformation str)
-;;
+(** {1 API}*)
 
-let constant_rule char transformation =
-  Context_free.Rule.constant
-    Integer
-    char
-    (expander_with_default_location transformation)
-;;
+(** {2 COnstructing address from string} *)
+
+(** [from_string addr] lift a string into an address, the address is wrapped
+    into a result. *)
+val from_string : string -> (t, [> error ]) result
+
+val tz1 : string -> (t, [> error ]) result
+val tz2 : string -> (t, [> error ]) result
+val tz3 : string -> (t, [> error ]) result
+val kt1 : string -> (t, [> error ]) result
+
+(** an exception ful version of [from_string]. *)
+val from_string' : string -> t
+
+(** {2 Util} *)
+
+val to_string : t -> string
+val pp : Format.formatter -> t -> unit
+val equal : t -> t -> bool
+val pp_error : Format.formatter -> error -> unit
+val equal_error : error -> error -> bool

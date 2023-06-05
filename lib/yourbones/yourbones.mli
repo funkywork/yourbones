@@ -35,6 +35,7 @@ type network_type = Network.Type.t
 (** {1 Tezos related modules} *)
 
 module Tez = Tez
+module Address = Address
 
 (** {1 Node related modules} *)
 

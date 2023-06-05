@@ -3,5 +3,6 @@
  (public_name yourbones-ppx)
  (libraries ppxlib yourbones)
  (ppx_runtime_libraries yourbones)
- (preprocess (pps ppxlib.metaquot))
+ (preprocess
+  (pps ppxlib.metaquot))
  (kind ppx_rewriter))

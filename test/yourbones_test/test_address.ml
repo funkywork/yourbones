@@ -147,89 +147,13 @@ let test_tz3_invalid_address_2 =
       expected, computed)
 ;;
 
-let test_tz4_valid_address =
-  test_equality
-    ~about:"tz4"
-    ~desc:"when the given address is valid it should wrap it into a Ok"
-    Alcotest.(result string address_error_testable)
-    (fun () ->
-      let address = "tz4HVR6aty9KwsQFHh81C1G7gBdhxT8kuytm" in
-      let expected = Ok address in
-      let computed = Result.(address |> Address.tz4 >|= Address.to_string) in
-      expected, computed)
-;;
-
-let test_tz4_invalid_address =
-  test_equality
-    ~about:"tz4"
-    ~desc:"when the given address is invalid it should wrap it into an Error"
-    Alcotest.(result string address_error_testable)
-    (fun () ->
-      let address = "tz4HVR6aty9KwsQFHh81C1G7gBdhxT8kuymt" in
-      let expected = Error (`Address_invalid_checksum address) in
-      let computed = Result.(address |> Address.tz4 >|= Address.to_string) in
-      expected, computed)
-;;
-
-let test_tz4_invalid_address_2 =
-  test_equality
-    ~about:"tz4"
-    ~desc:
-      "when the given address has not the right kind it should wrap the result \
-       in an error"
-    Alcotest.(result string address_error_testable)
-    (fun () ->
-      let address = "tz3WEJYwJ6pPwVbSL8FrSoAXRmFHHZTuEnMA" in
-      let expected = Error (`Address_invalid_prefix address) in
-      let computed = Result.(address |> Address.tz4 >|= Address.to_string) in
-      expected, computed)
-;;
-
-let test_sr1_valid_address =
-  test_equality
-    ~about:"sr1"
-    ~desc:"when the given address is valid it should wrap it into a Ok"
-    Alcotest.(result string address_error_testable)
-    (fun () ->
-      let address = "sr1JPVatbbPoGp4vb6VfQ1jzEPMrYFcKq6VG" in
-      let expected = Ok address in
-      let computed = Result.(address |> Address.sr1 >|= Address.to_string) in
-      expected, computed)
-;;
-
-let test_sr1_invalid_address =
-  test_equality
-    ~about:"sr1"
-    ~desc:"when the given address is invalid it should wrap it into an Error"
-    Alcotest.(result string address_error_testable)
-    (fun () ->
-      let address = "sr1JPVatbbPoGp4vb6VfQ1jzEPMrYFcKq6GV" in
-      let expected = Error (`Address_invalid_checksum address) in
-      let computed = Result.(address |> Address.sr1 >|= Address.to_string) in
-      expected, computed)
-;;
-
-let test_sr1_invalid_address_2 =
-  test_equality
-    ~about:"sr1"
-    ~desc:
-      "when the given address has not the right kind it should wrap the result \
-       in an error"
-    Alcotest.(result string address_error_testable)
-    (fun () ->
-      let address = "tz4HVR6aty9KwsQFHh81C1G7gBdhxT8kuytm" in
-      let expected = Error (`Address_invalid_prefix address) in
-      let computed = Result.(address |> Address.sr1 >|= Address.to_string) in
-      expected, computed)
-;;
-
 let test_kt1_valid_address =
   test_equality
     ~about:"kt1"
     ~desc:"when the given address is valid it should wrap it into a Ok"
     Alcotest.(result string address_error_testable)
     (fun () ->
-      let address = "KT1RvwLgpxVv9ANCKsDb5vBgTaZRG1W4bKWP" in
+      let address = "KT1HbQepzV1nVGg8QVznG7z4RcHseD5kwqBn" in
       let expected = Ok address in
       let computed = Result.(address |> Address.kt1 >|= Address.to_string) in
       expected, computed)
@@ -272,12 +196,6 @@ let cases =
     ; test_tz3_valid_address
     ; test_tz3_invalid_address
     ; test_tz3_invalid_address_2
-    ; test_tz4_valid_address
-    ; test_tz4_invalid_address
-    ; test_tz4_invalid_address_2
-    ; test_sr1_valid_address
-    ; test_sr1_invalid_address
-    ; test_sr1_invalid_address_2
     ; test_kt1_valid_address
     ; test_kt1_invalid_address
     ; test_kt1_invalid_address_2

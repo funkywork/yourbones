@@ -20,53 +20,43 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** A representation of a Tezos address. For the moment, address type indexing
-    only serves to define which keys are supported by the library.*)
-
-(** {1 Supported address types} *)
-
-type kind =
-  [ `Ed25519
-  | `Secp256k1
-  | `P256
-  | `NoCurve
-  | `Bls12_381
-  | `SR1
-  ]
-
-type tz1 = [ `Ed25519 ]
-type tz2 = [ `Secp256k1 ]
-type tz3 = [ `P256 ]
-type tz4 = [ `Bls12_381 ]
-type kt1 = [ `NoCurve ]
-type sr1 = [ `SR1 ]
+(** A representation of a Tezos address. *)
 
 (** {1 Types} *)
 
-type 'a t constraint 'a = kind
+(** An address is a string encoded in base58..*)
+type t
 
+(** Errors related to Address. *)
 type error =
   [ `Address_invalid_prefix of string
   | `Address_invalid_checksum of string
   | `Address_invalid_length of string
   ]
 
+(** An exception used to lift [error] into an exception. *)
+exception Address_exception of error
+
 (** {1 API}*)
 
 (** {2 COnstructing address from string} *)
 
-val tz1 : string -> ([> tz1 ] t, [> error ]) result
-val tz2 : string -> ([> tz2 ] t, [> error ]) result
-val tz3 : string -> ([> tz3 ] t, [> error ]) result
-val tz4 : string -> ([> tz4 ] t, [> error ]) result
-val kt1 : string -> ([> kt1 ] t, [> error ]) result
-val sr1 : string -> ([> sr1 ] t, [> error ]) result
-val from_string : string -> ('a t, [> error ]) result
+(** [from_string addr] lift a string into an address, the address is wrapped
+    into a result. *)
+val from_string : string -> (t, [> error ]) result
+
+val tz1 : string -> (t, [> error ]) result
+val tz2 : string -> (t, [> error ]) result
+val tz3 : string -> (t, [> error ]) result
+val kt1 : string -> (t, [> error ]) result
+
+(** an exception ful version of [from_string]. *)
+val from_string' : string -> t
 
 (** {2 Util} *)
 
-val to_string : _ t -> string
-val pp : Format.formatter -> _ t -> unit
-val equal : _ t -> _ t -> bool
+val to_string : t -> string
+val pp : Format.formatter -> t -> unit
+val equal : t -> t -> bool
 val pp_error : Format.formatter -> error -> unit
 val equal_error : error -> error -> bool

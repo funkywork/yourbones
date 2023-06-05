@@ -28,7 +28,7 @@
 
 (** {1 Types} *)
 
-(** A type that describes a [tez], expressed in [nanotez].*)
+(** A type that describes a [tez], expressed in [mutez].*)
 type t
 
 (** Errors related to Tez. *)
@@ -40,7 +40,7 @@ type error =
   | `Tez_invalid_divisor of int64
   ]
 
-(** An exception used to lift [tez_error] into an exception. *)
+(** An exception used to lift [error] into an exception. *)
 exception Tez_exception of error
 
 (** {1 Misc} *)

@@ -23,7 +23,7 @@
 open Js_of_ocaml
 
 type t =
-  { address : Yourbones.Address.kind Yourbones.Address.t
+  { address : Yourbones.Address.t
   ; network : Network.t
   ; scopes : Permission_scope.t list
   ; threshold : Threshold.t option
@@ -32,9 +32,7 @@ type t =
 let from_js permission_entity =
   let open Nightmare_js.Undefinable in
   let address =
-    Js.to_string permission_entity##.address
-    |> Yourbones.Address.from_string
-    |> Result.get_ok (* Unreachable failure *)
+    Js.to_string permission_entity##.address |> Yourbones.Address.from_string'
   in
   let network = Network.from_js permission_entity##.network in
   let scopes = Permission_scope.from_js_array permission_entity##.scopes in

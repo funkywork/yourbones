@@ -20,22 +20,11 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type kind =
-  [ `Ed25519
-  | `Secp256k1
-  | `P256
-  | `NoCurve
-  | `Bls12_381
-  | `SR1
-  ]
-
-type tz1 = [ `Ed25519 ]
-type tz2 = [ `Secp256k1 ]
-type tz3 = [ `P256 ]
-type tz4 = [ `Bls12_381 ]
-type kt1 = [ `NoCurve ]
-type sr1 = [ `SR1 ]
-type 'a t = 'a * string constraint 'a = kind
+type t =
+  | Tz1 of string
+  | Tz2 of string
+  | Tz3 of string
+  | Kt1 of string
 
 type error =
   [ `Address_invalid_prefix of string
@@ -43,86 +32,82 @@ type error =
   | `Address_invalid_length of string
   ]
 
+exception Address_exception of error
+
 let ed25519_prefix = "\006\161\159"
 let secp256k1_prefix = "\006\161\161"
 let p256_prefix = "\006\161\164"
-let bls12_381_prefix = "\006\161\166"
 let nocurve_prefix = "\002\090\121"
-let sr1_prefix = "\006\124\117"
 
 let from_string str =
-  match
-    if String.starts_with ~prefix:"tz1" str
-    then Ok (`Ed25519, ed25519_prefix)
-    else if String.starts_with ~prefix:"tz2" str
-    then Ok (`Secp256k1, secp256k1_prefix)
-    else if String.starts_with ~prefix:"tz3" str
-    then Ok (`P256, p256_prefix)
-    else if String.starts_with ~prefix:"tz4" str
-    then Ok (`Bls12_381, bls12_381_prefix)
-    else if String.starts_with ~prefix:"KT1" str
-    then Ok (`NoCurve, nocurve_prefix)
-    else if String.starts_with ~prefix:"sr1" str
-    then Ok (`SR1, sr1_prefix)
-    else Error (`Address_invalid_prefix str)
-  with
-  | Ok (kind, prefix) ->
-    let encoded = Tezos_base58.Base58 str in
-    (match Tezos_base58.decode ~prefix encoded with
-     | Some decoded ->
-       if Int.equal (String.length decoded) 20
-       then Ok (kind, str)
-       else
-         (* Hard to provides a counter-example *)
-         Error (`Address_invalid_length str)
-     | None -> Error (`Address_invalid_checksum str))
-  | Error err -> Error err
+  let len = String.length str in
+  if not (Int.equal len 36)
+  then Error (`Address_invalid_length str)
+  else (
+    let prefix_with_fun =
+      match str.[0], str.[1], str.[2] with
+      | 't', 'z', '1' -> Some ((fun x -> Tz1 x), ed25519_prefix)
+      | 't', 'z', '2' -> Some ((fun x -> Tz2 x), secp256k1_prefix)
+      | 't', 'z', '3' -> Some ((fun x -> Tz3 x), p256_prefix)
+      | 'K', 'T', '1' -> Some ((fun x -> Kt1 x), nocurve_prefix)
+      | _ -> None
+    in
+    match prefix_with_fun with
+    | None -> Error (`Address_invalid_prefix str)
+    | Some (construct, prefix) ->
+      let encoded = Tezos_base58.Base58 str in
+      (match Tezos_base58.decode ~prefix encoded with
+       | None -> Error (`Address_invalid_checksum str)
+       | Some decoded ->
+         if Int.equal (String.length decoded) 20
+         then Ok (construct str)
+         else Error (`Address_invalid_length str)))
 ;;
 
 let tz1 str =
   match from_string str with
-  | Ok ((`Ed25519, _) as str) -> Ok str
+  | Ok (Tz1 x) -> Ok (Tz1 x)
   | Ok _ -> Error (`Address_invalid_prefix str)
   | Error err -> Error err
 ;;
 
 let tz2 str =
   match from_string str with
-  | Ok ((`Secp256k1, _) as str) -> Ok str
+  | Ok (Tz2 x) -> Ok (Tz2 x)
   | Ok _ -> Error (`Address_invalid_prefix str)
   | Error err -> Error err
 ;;
 
 let tz3 str =
   match from_string str with
-  | Ok ((`P256, _) as str) -> Ok str
-  | Ok _ -> Error (`Address_invalid_prefix str)
-  | Error err -> Error err
-;;
-
-let tz4 str =
-  match from_string str with
-  | Ok ((`Bls12_381, _) as str) -> Ok str
+  | Ok (Tz3 x) -> Ok (Tz3 x)
   | Ok _ -> Error (`Address_invalid_prefix str)
   | Error err -> Error err
 ;;
 
 let kt1 str =
   match from_string str with
-  | Ok ((`NoCurve, _) as str) -> Ok str
+  | Ok (Kt1 x) -> Ok (Kt1 x)
   | Ok _ -> Error (`Address_invalid_prefix str)
   | Error err -> Error err
 ;;
 
-let sr1 str =
+let from_string' str =
   match from_string str with
-  | Ok ((`SR1, _) as str) -> Ok str
-  | Ok _ -> Error (`Address_invalid_prefix str)
-  | Error err -> Error err
+  | Ok x -> x
+  | Error err -> raise (Address_exception err)
 ;;
 
-let pp ppf (_, x) = Format.fprintf ppf "%s" x
-let equal (_, a) (_, b) = String.equal a b
+let pp ppf = function
+  | Tz1 x | Tz2 x | Tz3 x | Kt1 x -> Format.fprintf ppf "%s" x
+;;
+
+let equal a b =
+  match a, b with
+  | Tz1 a, Tz1 b | Tz2 a, Tz2 b | Tz3 a, Tz3 b | Kt1 a, Kt1 b ->
+    String.equal a b
+  | _ -> false
+;;
 
 let pp_error ppf = function
   | `Address_invalid_prefix str ->
@@ -141,4 +126,6 @@ let equal_error a b =
   | _ -> false
 ;;
 
-let to_string (_, x) = x
+let to_string = function
+  | Tz1 x | Tz2 x | Tz3 x | Kt1 x -> x
+;;

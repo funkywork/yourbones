@@ -32,7 +32,7 @@
 
 module type TEZ = sig
   (** A common interface to manage the different representations of [tez]
-      ([microtez] and [nanotez]). *)
+      ([microtez] or [tez]). *)
 
   (** The type representing the numeric value (usually [Int64.t]). *)
   type t

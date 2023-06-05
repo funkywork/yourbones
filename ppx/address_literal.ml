@@ -76,28 +76,10 @@ let tz3_extender =
     (generic_expander kind)
 ;;
 
-let tz4_extender =
-  let ((extender_name, _) as kind) = "tz4", Address.tz4 in
-  Extension.V3.declare
-    extender_name
-    Extension.Context.expression
-    (extracter ())
-    (generic_expander kind)
-;;
-
 let kt1_extender =
   let kind = "kt1", Address.kt1 in
   Extension.V3.declare
     "KT1"
-    Extension.Context.expression
-    (extracter ())
-    (generic_expander kind)
-;;
-
-let sr1_extender =
-  let ((extender_name, _) as kind) = "sr1", Address.sr1 in
-  Extension.V3.declare
-    extender_name
     Extension.Context.expression
     (extracter ())
     (generic_expander kind)
@@ -108,8 +90,6 @@ let register =
   , [ Context_free.Rule.extension tz1_extender
     ; Context_free.Rule.extension tz2_extender
     ; Context_free.Rule.extension tz3_extender
-    ; Context_free.Rule.extension tz4_extender
     ; Context_free.Rule.extension kt1_extender
-    ; Context_free.Rule.extension sr1_extender
     ] )
 ;;

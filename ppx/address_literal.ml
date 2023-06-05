@@ -35,7 +35,7 @@ let fail_with_error ?location kind str err =
     err
 ;;
 
-let generic_expander (k_str, f) ~ctxt potential_address =
+let generic_expander k_str f ~ctxt potential_address =
   let loc = Expansion_context.Extension.extension_point_loc ctxt in
   match f potential_address with
   | Error err -> fail_with_error ~location:loc k_str potential_address err
@@ -49,40 +49,44 @@ let generic_expander (k_str, f) ~ctxt potential_address =
     [%expr Result.get_ok [%e expr]]
 ;;
 
-let tz1_extender =
-  let ((extender_name, _) as kind) = "tz1", Address.tz1 in
+let address_expander =
   Extension.V3.declare
-    extender_name
+    "address"
     Extension.Context.expression
     (extracter ())
-    (generic_expander kind)
+    (generic_expander "from_string" Address.from_string)
+;;
+
+let tz1_extender =
+  Extension.V3.declare
+    "tz1"
+    Extension.Context.expression
+    (extracter ())
+    (generic_expander "tz1" Address.tz1)
 ;;
 
 let tz2_extender =
-  let ((extender_name, _) as kind) = "tz2", Address.tz2 in
   Extension.V3.declare
-    extender_name
+    "tz2"
     Extension.Context.expression
     (extracter ())
-    (generic_expander kind)
+    (generic_expander "tz2" Address.tz2)
 ;;
 
 let tz3_extender =
-  let ((extender_name, _) as kind) = "tz3", Address.tz3 in
   Extension.V3.declare
-    extender_name
+    "tz3"
     Extension.Context.expression
     (extracter ())
-    (generic_expander kind)
+    (generic_expander "tz3" Address.tz3)
 ;;
 
 let kt1_extender =
-  let kind = "kt1", Address.kt1 in
   Extension.V3.declare
-    "KT1"
+    "kt1"
     Extension.Context.expression
     (extracter ())
-    (generic_expander kind)
+    (generic_expander "kt1" Address.kt1)
 ;;
 
 let register =
@@ -91,5 +95,6 @@ let register =
     ; Context_free.Rule.extension tz2_extender
     ; Context_free.Rule.extension tz3_extender
     ; Context_free.Rule.extension kt1_extender
+    ; Context_free.Rule.extension address_expander
     ] )
 ;;

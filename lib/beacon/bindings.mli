@@ -122,6 +122,20 @@ class type permission_response_output =
     method walletKey : js_string t or_undefined readonly_prop
   end
 
+class type request_broadcast_input =
+  object
+    method network : network t or_undefined readonly_prop
+    method signedTransaction : js_string t readonly_prop
+  end
+
+class type broadcast_response =
+  object
+    method _type : js_string t readonly_prop
+    method transactionHash : js_string t readonly_prop
+  end
+
+class type broadcast_response_output = broadcast_response
+
 (** {1 DAppClient}
 
     Bindings for
@@ -161,6 +175,9 @@ class type dapp_client =
 
     method getAccounts : account_info t js_array t Promise.t meth
     method getActiveAccount : account_info t or_undefined Promise.t meth
+
+    method requestBroadcast :
+      request_broadcast_input t -> broadcast_response_output t Promise.t meth
 
     method requestPermissions :
       request_permission_input t or_undefined

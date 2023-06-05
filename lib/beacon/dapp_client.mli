@@ -88,6 +88,14 @@ val get_accounts : t -> Account_info.t list Lwt.t
     account. *)
 val get_active_account : t -> Account_info.t option Lwt.t
 
+(** [request_broadcast ?network ~signed_transaction client] request the
+    injection of an already-signed transaction to the network. *)
+val request_broadcast
+  :  ?network:Network.t
+  -> signed_transaction:string
+  -> t
+  -> Broadcast_response_output.t Lwt.t
+
 (** [request_permissions ?network ?scopes client] send a permission request to
     the DApp. This should be done as the first step. The wallet will respond
     with an publicKey and permissions that were given. The account returned will

@@ -165,8 +165,16 @@ let request_permissions ?network ?scopes client =
              |> to_optdef
         end)
   in
-  let () = Nightmare_js.Console.log input in
   let open Lwt.Syntax in
   let+ output = client##requestPermissions input |> Promise.as_lwt in
   Permission_response_output.from_js output
+;;
+
+let request_broadcast ?network ~signed_transaction client =
+  let input =
+    Request_broadcast_input.({ network; signed_transaction } |> to_js)
+  in
+  let open Lwt.Syntax in
+  let+ output = client##requestBroadcast input |> Promise.as_lwt in
+  Broadcast_response_output.from_js output
 ;;

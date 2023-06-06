@@ -2,7 +2,7 @@
  (name main)
  (modes js)
  (preprocess
-  (pps js_of_ocaml-ppx yourbones_ppx))
+  (pps js_of_ocaml-ppx yourbones-ppx))
  (js_of_ocaml
   (flags :standard))
  (promote

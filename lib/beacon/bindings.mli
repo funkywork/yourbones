@@ -37,6 +37,7 @@ type connection_status = js_string
 type mutez = js_string
 type timeframe = js_string
 type origin_kind = js_string
+type packed_tezos_operation
 
 class type network =
   object
@@ -128,13 +129,43 @@ class type request_broadcast_input =
     method signedTransaction : js_string t readonly_prop
   end
 
-class type broadcast_response =
+class type transaction_hash_output_response =
   object
+    inherit beacon_base_message
     method _type : js_string t readonly_prop
     method transactionHash : js_string t readonly_prop
   end
 
-class type broadcast_response_output = broadcast_response
+class type broadcast_response_output = transaction_hash_output_response
+class type operation_response_output = transaction_hash_output_response
+
+class type tezos_base_operation =
+  object
+    method kind : js_string t readonly_prop
+  end
+
+class type partial_tezos_operation =
+  object
+    method kind : js_string t readonly_prop
+    method source : js_string t or_undefined readonly_prop
+    method fee : js_string t or_undefined readonly_prop
+    method counter : js_string t or_undefined readonly_prop
+    method gas_limit : js_string t or_undefined readonly_prop
+    method storage_limit : js_string t or_undefined readonly_prop
+  end
+
+class type tezos_transaction =
+  object
+    inherit partial_tezos_operation
+    method amount : js_string t readonly_prop
+    method destination : js_string t readonly_prop
+    (* FIXME: method parameters  *)
+  end
+
+class type request_operation_input =
+  object
+    method operationDetails : packed_tezos_operation t js_array t readonly_prop
+  end
 
 (** {1 DAppClient}
 
@@ -178,6 +209,9 @@ class type dapp_client =
 
     method requestBroadcast :
       request_broadcast_input t -> broadcast_response_output t Promise.t meth
+
+    method requestOperation :
+      request_operation_input t -> operation_response_output t Promise.t meth
 
     method requestPermissions :
       request_permission_input t or_undefined

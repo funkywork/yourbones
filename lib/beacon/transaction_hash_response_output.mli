@@ -21,26 +21,15 @@
     SOFTWARE. *)
 
 open Js_of_ocaml
-open Nightmare_js
+
+(** Describes the result of a request that returns a transaction hash. *)
 
 type t =
-  { type_ : Message_type.t
+  { version : string
+  ; id : string
+  ; sender_id : string
+  ; type_ : Message_type.t
   ; transaction_hash : string
   }
 
-let from_js response =
-  let open Option in
-  let type_ =
-    Message_type.from_string (Js.to_string response##._type)
-    |> value ~default:Message_type.Error
-  in
-  let transaction_hash = Js.to_string response##.transactionHash in
-  { type_; transaction_hash }
-;;
-
-let to_js { type_; transaction_hash } =
-  object%js
-    val _type = Message_type.to_string type_ |> Js.string
-    val transactionHash = Js.string transaction_hash
-  end
-;;
+val from_js : Bindings.transaction_hash_output_response Js.t -> t

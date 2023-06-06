@@ -94,7 +94,7 @@ val request_broadcast
   :  ?network:Network.t
   -> signed_transaction:string
   -> t
-  -> Broadcast_response_output.t Lwt.t
+  -> Transaction_hash_response_output.t Lwt.t
 
 (** [request_permissions ?network ?scopes client] send a permission request to
     the DApp. This should be done as the first step. The wallet will respond
@@ -105,3 +105,16 @@ val request_permissions
   -> ?scopes:Permission_scope.t list
   -> t
   -> Permission_response_output.t Lwt.t
+
+(** [request_simple_transaction  ~destination client amount] request a very
+    simple transaction to a specific destination.*)
+val request_simple_transaction
+  :  ?source:Yourbones.Address.t
+  -> ?fee:Yourbones.tez
+  -> ?counter:Z.t
+  -> ?gas_limit:Z.t
+  -> ?storage_limit:Z.t
+  -> destination:Yourbones.Address.t
+  -> t
+  -> Yourbones.tez
+  -> Transaction_hash_response_output.t Lwt.t

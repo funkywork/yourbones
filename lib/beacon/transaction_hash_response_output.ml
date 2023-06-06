@@ -21,14 +21,25 @@
     SOFTWARE. *)
 
 open Js_of_ocaml
-
-(** Describes the result of a request Broadcast returning the hash of a signed
-    operation. *)
+open Nightmare_js
 
 type t =
-  { type_ : Message_type.t
+  { version : string
+  ; id : string
+  ; sender_id : string
+  ; type_ : Message_type.t
   ; transaction_hash : string
   }
 
-val from_js : Bindings.broadcast_response_output Js.t -> t
-val to_js : t -> Bindings.broadcast_response_output Js.t
+let from_js response =
+  let open Option in
+  let Beacon_base_message.{ version; sender_id; id } =
+    Beacon_base_message.from_js response
+  in
+  let type_ =
+    Message_type.from_string (Js.to_string response##._type)
+    |> value ~default:Message_type.Error
+  in
+  let transaction_hash = Js.to_string response##.transactionHash in
+  { version; id; sender_id; type_; transaction_hash }
+;;

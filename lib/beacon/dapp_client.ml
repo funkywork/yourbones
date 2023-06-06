@@ -176,5 +176,30 @@ let request_broadcast ?network ~signed_transaction client =
   in
   let open Lwt.Syntax in
   let+ output = client##requestBroadcast input |> Promise.as_lwt in
-  Broadcast_response_output.from_js output
+  Transaction_hash_response_output.from_js output
+;;
+
+let request_simple_transaction
+  ?source
+  ?fee
+  ?counter
+  ?gas_limit
+  ?storage_limit
+  ~destination
+  client
+  amount
+  =
+  let transaction =
+    let open Operation.Transaction in
+    forge ?source ?fee ?counter ?gas_limit ?storage_limit ~destination amount
+    |> pack
+  in
+  let batch =
+    object%js
+      val operationDetails = Js.array [| transaction |]
+    end
+  in
+  let open Lwt.Syntax in
+  let+ output = client##requestOperation batch |> Promise.as_lwt in
+  Transaction_hash_response_output.from_js output
 ;;

@@ -29,12 +29,6 @@ module Kind = struct
   let to_string = function
     | Transaction -> "transaction"
   ;;
-
-  let from_string str =
-    match Util.normalize str with
-    | "transaction" -> Some Transaction
-    | _ -> None
-  ;;
 end
 
 module Partial = struct
@@ -45,9 +39,43 @@ module Partial = struct
     ; counter : Z.t option
     ; gas_limit : Z.t option
     ; storage_limit : Z.t option
+    ; amount : Yourbones.Tez.t option
+    ; destination : Yourbones.Address.t option
     }
 
-  let to_js { kind; source; fee; counter; gas_limit; storage_limit } =
+  let forge
+    kind
+    ?source
+    ?fee
+    ?counter
+    ?gas_limit
+    ?storage_limit
+    ?amount
+    ?destination
+    ()
+    =
+    { kind
+    ; source
+    ; fee
+    ; counter
+    ; gas_limit
+    ; storage_limit
+    ; amount
+    ; destination
+    }
+  ;;
+
+  let to_js
+    { kind
+    ; source
+    ; fee
+    ; counter
+    ; gas_limit
+    ; storage_limit
+    ; amount
+    ; destination
+    }
+    =
     let open Option in
     let open Preface.Fun.Infix in
     object%js
@@ -64,53 +92,40 @@ module Partial = struct
       val counter = Js.string % Z.to_string <$> counter |> to_optdef
       val gas_limit = Js.string % Z.to_string <$> gas_limit |> to_optdef
       val storage_limit = Js.string % Z.to_string <$> storage_limit |> to_optdef
+
+      val amount =
+        Js.string % Int64.to_string % Yourbones.Tez.to_mutez
+        <$> amount
+        |> to_optdef
+
+      val destination =
+        Js.string % Yourbones.Address.to_string <$> destination |> to_optdef
     end
   ;;
 end
 
+type t = Partial.t
+
+let to_js = Partial.to_js
+
+let batch operations =
+  let details = Util.list_to_js_with to_js operations in
+  object%js
+    val operationDetails = details
+  end
+;;
+
 module Transaction = struct
-  type t =
-    { source : Yourbones.Address.t option
-    ; fee : Yourbones.Tez.t option
-    ; counter : Z.t option
-    ; gas_limit : Z.t option
-    ; storage_limit : Z.t option
-    ; amount : Yourbones.Tez.t
-    ; destination : Yourbones.Address.t
-    }
-
   let forge ?source ?fee ?counter ?gas_limit ?storage_limit ~destination amount =
-    { source; fee; counter; gas_limit; storage_limit; amount; destination }
+    Partial.forge
+      Kind.Transaction
+      ?source
+      ?fee
+      ?counter
+      ?gas_limit
+      ?storage_limit
+      ~destination
+      ~amount
+      ()
   ;;
-
-  let to_js
-    { source; fee; counter; gas_limit; storage_limit; amount; destination }
-    =
-    let obj =
-      Partial.
-        { kind = Kind.Transaction
-        ; source
-        ; fee
-        ; counter
-        ; gas_limit
-        ; storage_limit
-        }
-      |> Partial.to_js
-    in
-    object%js
-      val kind = obj##.kind
-      val source = obj##.source
-      val fee = obj##.fee
-      val counter = obj##.counter
-      val gas_limit = obj##.gas_limit
-      val storage_limit = obj##.storage_limit
-
-      val amount =
-        amount |> Yourbones.Tez.to_int64 |> Int64.to_string |> Js.string
-
-      val destination = destination |> Yourbones.Address.to_string |> Js.string
-    end
-  ;;
-
-  let pack x = to_js x |> Js.Unsafe.coerce
 end

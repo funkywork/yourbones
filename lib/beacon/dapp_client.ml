@@ -189,15 +189,17 @@ let request_simple_transaction
   client
   amount
   =
-  let transaction =
-    let open Operation.Transaction in
-    forge ?source ?fee ?counter ?gas_limit ?storage_limit ~destination amount
-    |> pack
-  in
   let batch =
-    object%js
-      val operationDetails = Js.array [| transaction |]
-    end
+    [ Operation.Transaction.forge
+        ?source
+        ?fee
+        ?counter
+        ?gas_limit
+        ?storage_limit
+        ~destination
+        amount
+    ]
+    |> Operation.batch
   in
   let open Lwt.Syntax in
   let+ output = client##requestOperation batch |> Promise.as_lwt in

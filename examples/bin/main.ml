@@ -19,7 +19,7 @@ let mount client account =
       Dapp_client.request_simple_transaction
         ~destination:[%address "tz1XxRjkB77R1rnxVRGQxmWAcG1cGQQeMAAL"]
         client
-        10t
+        1t
     in
     Nightmare_js.Console.(string log) transaction_hash)
 ;;

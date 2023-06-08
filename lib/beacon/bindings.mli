@@ -37,7 +37,6 @@ type connection_status = js_string
 type mutez = js_string
 type timeframe = js_string
 type origin_kind = js_string
-type packed_tezos_operation
 
 class type network =
   object
@@ -144,28 +143,25 @@ class type tezos_base_operation =
     method kind : js_string t readonly_prop
   end
 
-class type partial_tezos_operation =
+class type tezos_partial_operation =
   object
-    method kind : js_string t readonly_prop
+    inherit tezos_base_operation
     method source : js_string t or_undefined readonly_prop
     method fee : js_string t or_undefined readonly_prop
     method counter : js_string t or_undefined readonly_prop
     method gas_limit : js_string t or_undefined readonly_prop
     method storage_limit : js_string t or_undefined readonly_prop
-  end
-
-class type tezos_transaction =
-  object
-    inherit partial_tezos_operation
-    method amount : js_string t readonly_prop
-    method destination : js_string t readonly_prop
+    method amount : js_string t or_undefined readonly_prop
+    method destination : js_string t or_undefined readonly_prop
     (* FIXME: method parameters  *)
   end
 
 class type request_operation_input =
   object
-    method operationDetails : packed_tezos_operation t js_array t readonly_prop
+    method operationDetails : tezos_partial_operation t js_array t readonly_prop
   end
+
+class type operation_batch = request_operation_input
 
 (** {1 DAppClient}
 

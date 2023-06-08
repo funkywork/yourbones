@@ -165,24 +165,24 @@ let request_permissions ?network ?scopes client =
              |> to_optdef
         end)
   in
-  let open Lwt.Syntax in
-  try
+  let wrapped () =
+    let open Lwt.Syntax in
     let+ output = client##requestPermissions input |> Promise.as_lwt in
     Ok (Permission_response_output.from_js output)
-  with
-  | exn -> Lwt.return @@ Error (`Request_permissions_rejection exn)
+  and handler exn = Lwt.return @@ Error (`Request_permissions_rejection exn) in
+  Lwt.catch wrapped handler
 ;;
 
 let request_broadcast ?network ~signed_transaction client =
   let input =
     Request_broadcast_input.({ network; signed_transaction } |> to_js)
   in
-  let open Lwt.Syntax in
-  try
+  let wrapped () =
+    let open Lwt.Syntax in
     let+ output = client##requestBroadcast input |> Promise.as_lwt in
     Ok (Transaction_hash_response_output.from_js output)
-  with
-  | exn -> Lwt.return @@ Error (`Request_broadcast_rejection exn)
+  and handler exn = Lwt.return @@ Error (`Request_broadcast_rejection exn) in
+  Lwt.catch wrapped handler
 ;;
 
 let request_simple_transaction
@@ -207,10 +207,10 @@ let request_simple_transaction
     ]
     |> Operation.batch
   in
-  let open Lwt.Syntax in
-  try
+  let wrapped () =
+    let open Lwt.Syntax in
     let+ output = client##requestOperation batch |> Promise.as_lwt in
     Ok (Transaction_hash_response_output.from_js output)
-  with
-  | exn -> Lwt.return @@ Error (`Request_operation_rejection exn)
+  and handler exn = Lwt.return @@ Error (`Request_operation_rejection exn) in
+  Lwt.catch wrapped handler
 ;;

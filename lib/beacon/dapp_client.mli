@@ -94,7 +94,10 @@ val request_broadcast
   :  ?network:Network.t
   -> signed_transaction:string
   -> t
-  -> Transaction_hash_response_output.t Lwt.t
+  -> ( Transaction_hash_response_output.t
+     , [> `Request_broadcast_rejection of exn ] )
+     result
+     Lwt.t
 
 (** [request_permissions ?network ?scopes client] send a permission request to
     the DApp. This should be done as the first step. The wallet will respond
@@ -104,7 +107,10 @@ val request_permissions
   :  ?network:Network.t
   -> ?scopes:Permission_scope.t list
   -> t
-  -> Permission_response_output.t Lwt.t
+  -> ( Permission_response_output.t
+     , [> `Request_permissions_rejection of exn ] )
+     result
+     Lwt.t
 
 (** [request_simple_transaction  ~destination client amount] request a very
     simple transaction to a specific destination.*)
@@ -117,4 +123,7 @@ val request_simple_transaction
   -> destination:Yourbones.Address.t
   -> t
   -> Yourbones.tez
-  -> Transaction_hash_response_output.t Lwt.t
+  -> ( Transaction_hash_response_output.t
+     , [> `Request_operation_rejection of exn ] )
+     result
+     Lwt.t

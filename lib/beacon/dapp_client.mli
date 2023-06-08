@@ -88,6 +88,17 @@ val get_accounts : t -> Account_info.t list Lwt.t
     account. *)
 val get_active_account : t -> Account_info.t option Lwt.t
 
+(** [request_broadcast ?network ~signed_transaction client] request the
+    injection of an already-signed transaction to the network. *)
+val request_broadcast
+  :  ?network:Network.t
+  -> signed_transaction:string
+  -> t
+  -> ( Transaction_hash_response_output.t
+     , [> `Request_broadcast_rejection of exn ] )
+     result
+     Lwt.t
+
 (** [request_permissions ?network ?scopes client] send a permission request to
     the DApp. This should be done as the first step. The wallet will respond
     with an publicKey and permissions that were given. The account returned will
@@ -96,4 +107,23 @@ val request_permissions
   :  ?network:Network.t
   -> ?scopes:Permission_scope.t list
   -> t
-  -> Permission_response_output.t Lwt.t
+  -> ( Permission_response_output.t
+     , [> `Request_permissions_rejection of exn ] )
+     result
+     Lwt.t
+
+(** [request_simple_transaction  ~destination client amount] request a very
+    simple transaction to a specific destination.*)
+val request_simple_transaction
+  :  ?source:Yourbones.Address.t
+  -> ?fee:Yourbones.tez
+  -> ?counter:Z.t
+  -> ?gas_limit:Z.t
+  -> ?storage_limit:Z.t
+  -> destination:Yourbones.Address.t
+  -> t
+  -> Yourbones.tez
+  -> ( Transaction_hash_response_output.t
+     , [> `Request_operation_rejection of exn ] )
+     result
+     Lwt.t

@@ -1,0 +1,44 @@
+(*  MIT License
+
+    Copyright (c) 2023 funkywork
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE. *)
+
+open Js_of_ocaml
+open Nightmare_js
+
+type t =
+  { network : Network.t option
+  ; signed_transaction : string
+  }
+
+let from_js input =
+  let open Undefinable in
+  let network = Network.from_js <$> input##.network |> to_option in
+  let signed_transaction = Js.to_string input##.signedTransaction in
+  { network; signed_transaction }
+;;
+
+let to_js { network; signed_transaction } =
+  let open Option in
+  object%js
+    val network = Network.to_js <$> network |> to_optdef
+    val signedTransaction = Js.string signed_transaction
+  end
+;;

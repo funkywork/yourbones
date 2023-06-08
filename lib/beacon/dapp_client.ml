@@ -165,8 +165,52 @@ let request_permissions ?network ?scopes client =
              |> to_optdef
         end)
   in
-  let () = Nightmare_js.Console.log input in
   let open Lwt.Syntax in
-  let+ output = client##requestPermissions input |> Promise.as_lwt in
-  Permission_response_output.from_js output
+  try
+    let+ output = client##requestPermissions input |> Promise.as_lwt in
+    Ok (Permission_response_output.from_js output)
+  with
+  | exn -> Lwt.return @@ Error (`Request_permissions_rejection exn)
+;;
+
+let request_broadcast ?network ~signed_transaction client =
+  let input =
+    Request_broadcast_input.({ network; signed_transaction } |> to_js)
+  in
+  let open Lwt.Syntax in
+  try
+    let+ output = client##requestBroadcast input |> Promise.as_lwt in
+    Ok (Transaction_hash_response_output.from_js output)
+  with
+  | exn -> Lwt.return @@ Error (`Request_broadcast_rejection exn)
+;;
+
+let request_simple_transaction
+  ?source
+  ?fee
+  ?counter
+  ?gas_limit
+  ?storage_limit
+  ~destination
+  client
+  amount
+  =
+  let batch =
+    [ Operation.Transaction.forge
+        ?source
+        ?fee
+        ?counter
+        ?gas_limit
+        ?storage_limit
+        ~destination
+        amount
+    ]
+    |> Operation.batch
+  in
+  let open Lwt.Syntax in
+  try
+    let+ output = client##requestOperation batch |> Promise.as_lwt in
+    Ok (Transaction_hash_response_output.from_js output)
+  with
+  | exn -> Lwt.return @@ Error (`Request_operation_rejection exn)
 ;;

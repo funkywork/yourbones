@@ -122,6 +122,47 @@ class type permission_response_output =
     method walletKey : js_string t or_undefined readonly_prop
   end
 
+class type request_broadcast_input =
+  object
+    method network : network t or_undefined readonly_prop
+    method signedTransaction : js_string t readonly_prop
+  end
+
+class type transaction_hash_output_response =
+  object
+    inherit beacon_base_message
+    method _type : js_string t readonly_prop
+    method transactionHash : js_string t readonly_prop
+  end
+
+class type broadcast_response_output = transaction_hash_output_response
+class type operation_response_output = transaction_hash_output_response
+
+class type tezos_base_operation =
+  object
+    method kind : js_string t readonly_prop
+  end
+
+class type tezos_partial_operation =
+  object
+    inherit tezos_base_operation
+    method source : js_string t or_undefined readonly_prop
+    method fee : js_string t or_undefined readonly_prop
+    method counter : js_string t or_undefined readonly_prop
+    method gas_limit : js_string t or_undefined readonly_prop
+    method storage_limit : js_string t or_undefined readonly_prop
+    method amount : js_string t or_undefined readonly_prop
+    method destination : js_string t or_undefined readonly_prop
+    (* FIXME: method parameters  *)
+  end
+
+class type request_operation_input =
+  object
+    method operationDetails : tezos_partial_operation t js_array t readonly_prop
+  end
+
+class type operation_batch = request_operation_input
+
 (** {1 DAppClient}
 
     Bindings for
@@ -161,6 +202,12 @@ class type dapp_client =
 
     method getAccounts : account_info t js_array t Promise.t meth
     method getActiveAccount : account_info t or_undefined Promise.t meth
+
+    method requestBroadcast :
+      request_broadcast_input t -> broadcast_response_output t Promise.t meth
+
+    method requestOperation :
+      request_operation_input t -> operation_response_output t Promise.t meth
 
     method requestPermissions :
       request_permission_input t or_undefined

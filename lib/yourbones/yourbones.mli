@@ -40,3 +40,4 @@ module Address = Address
 (** {1 Node related modules} *)
 
 module Network = Network
+module RPC = Rpc

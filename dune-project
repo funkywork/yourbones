@@ -41,6 +41,21 @@
   (yourbones (= :version))
   (mdx (and :with-test (>= 2.0.0)))))
 
+(package
+  (name yourbones_js)
+  (synopsis "The JavaScript runtime for interaction with Tezos")
+  (description "JavaScript runtime to exploit data described by the Yourbones library and interact with Tezos RPCs")
+  (depends
+   (ocaml (>= 5.0.0))
+   (dune (>= 3.0.0))
+   (lwt (>= 5.6.1))
+   (preface (>= 1.0.0))
+   (js_of_ocaml-compiler (>= 5.2.0))
+   (js_of_ocaml-ppx (>= 5.2.0))
+   (js_of_ocaml-lwt (>= 5.2.0))
+   zarith_stubs_js
+   (nightmare_js :pinned)
+   (yourbones (= :version))))
 
 (package
   (name yourbones_js-beacon)

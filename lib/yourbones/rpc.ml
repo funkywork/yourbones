@@ -111,6 +111,11 @@ let encoding_of entrypoint =
   encoding
 ;;
 
+let endpoint_of entrypoint =
+  let { endpoint; _ } = entrypoint () in
+  endpoint
+;;
+
 module Directory = struct
   module Internal = struct
     let chain_by_id () = ~/"chains" /: Chain_id.fragment

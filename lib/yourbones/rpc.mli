@@ -106,6 +106,14 @@ val encoding_of
   :  (Nightmare_service.Method.t, 'encoding, 'continuation, 'witness) wrapped
   -> 'encoding Data_encoding.t
 
+val endpoint_of
+  :  (Nightmare_service.Method.t, 'encoding, 'continuation, 'witness) wrapped
+  -> ( [ `Outer ]
+     , Nightmare_service.Method.t
+     , 'continuation
+     , 'witness )
+     Nightmare_service.wrapped_endpoint
+
 (** {1 Infix operators}
 
     Infix operators for easy path construction. *)

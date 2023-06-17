@@ -41,6 +41,7 @@ module Infix = struct
   let ( ~/: ) hole = Nightmare_service.Path.(add_variable hole root)
   let ( / ) p constant = Nightmare_service.Path.(add_constant constant p)
   let ( /: ) p hole = Nightmare_service.Path.(add_variable hole p)
+  let ( ~: ) p = p ()
 end
 
 include Infix
@@ -109,3 +110,17 @@ let encoding_of entrypoint =
   let { encoding; _ } = entrypoint () in
   encoding
 ;;
+
+module Directory = struct
+  module Internal = struct
+    let chain_by_id () = ~/"chains" /: Chain_id.fragment
+    let block_by_id () = ~:chain_by_id / "blocks" /: Block_id.fragment
+    let context () = ~:block_by_id / "context"
+    let contract () = ~:context / "contracts" /: Address.fragment
+    let balance () = ~:contract / "balance"
+  end
+
+  let get_balance ~node_address () =
+    get ~encoding:Tez.encoding ~node_address ~:Internal.balance
+  ;;
+end

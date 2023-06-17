@@ -129,3 +129,21 @@ module Infix : sig
 end
 
 include module type of Infix
+
+(** {1 Directory}
+
+    Although each dApp can build its own set of RPCs using the combiners
+    described above, here's a list of pre-implemented RPCs that may prove useful
+    in dApp development, on a recurring basis. *)
+
+module Directory : sig
+  (** [get_balance ~node_address] describes the entrypoint
+      [/chains/<chain_id>/blocks/<block_id>/context/contracts/<contract_id>/balance (GET)] *)
+  val get_balance
+    :  node_address:string
+    -> ( [> `GET ]
+       , Tez.t
+       , Chain_id.t -> Block_id.t -> Address.t -> 'witness
+       , 'witness )
+       wrapped
+end

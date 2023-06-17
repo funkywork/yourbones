@@ -129,3 +129,13 @@ let equal_error a b =
 let to_string = function
   | Tz1 x | Tz2 x | Tz3 x | Kt1 x -> x
 ;;
+
+module Fragment = struct
+  type nonrec t = t
+
+  let fragment_name = ":contract_id"
+  let fragment_from_string repr = repr |> from_string |> Result.to_option
+  let fragment_to_string x = to_string x
+end
+
+let fragment = Nightmare_service.Path.variable' (module Fragment)

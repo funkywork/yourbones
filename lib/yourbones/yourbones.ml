@@ -26,4 +26,6 @@ type network_type = Network.Type.t
 module Tez = Tez
 module Network = Network
 module Address = Address
+module Chain_id = Chain_id
+module Block_id = Block_id
 module RPC = Rpc

@@ -41,6 +41,7 @@
   (yourbones (= :version))
   (mdx (and :with-test (>= 2.0.0)))))
 
+
 (package
   (name yourbones_js-beacon)
   (synopsis "A very opinionated binding of Beacon-SDK in Js_of_OCaml")

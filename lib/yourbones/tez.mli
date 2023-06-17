@@ -232,6 +232,10 @@ end
 
 include module type of Infix (** @inline *)
 
+(** {1 Encoding} *)
+
+val encoding : t Data_encoding.t
+
 (** {1 Error handling} *)
 
 (** Pretty printer for errors. *)

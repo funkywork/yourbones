@@ -38,7 +38,8 @@ type ('method_, 'encoding, 'continuation, 'witness) entrypoint
 (** A [wrapped] entrypoint is wrapped in a [unit -> entrypoint] function to
     avoid the value restriction. *)
 type ('method_, 'encoding, 'continuation, 'witness) wrapped =
-  unit -> ('method_, 'encoding, 'continuation, 'witness) entrypoint
+  node_address:string
+  -> ('method_, 'encoding, 'continuation, 'witness) entrypoint
 
 (** {1 Entrypoint construction} *)
 
@@ -99,15 +100,15 @@ val patch
 (** {1 Retreive data about entrypoints} *)
 
 val method_of
-  :  (Nightmare_service.Method.t, 'encoding, 'continuation, 'witness) wrapped
+  :  (Nightmare_service.Method.t, 'encoding, 'continuation, 'witness) entrypoint
   -> [> Nightmare_service.Method.t ]
 
 val encoding_of
-  :  (Nightmare_service.Method.t, 'encoding, 'continuation, 'witness) wrapped
+  :  (Nightmare_service.Method.t, 'encoding, 'continuation, 'witness) entrypoint
   -> 'encoding Data_encoding.t
 
 val endpoint_of
-  :  (Nightmare_service.Method.t, 'encoding, 'continuation, 'witness) wrapped
+  :  (Nightmare_service.Method.t, 'encoding, 'continuation, 'witness) entrypoint
   -> ( [ `Outer ]
      , Nightmare_service.Method.t
      , 'continuation
@@ -148,10 +149,9 @@ module Directory : sig
   (** [get_balance ~node_address] describes the entrypoint
       [/chains/<chain_id>/blocks/<block_id>/context/contracts/<contract_id>/balance (GET)] *)
   val get_balance
-    :  node_address:string
-    -> ( [> `GET ]
-       , Tez.t
-       , Chain_id.t -> Block_id.t -> Address.t -> 'witness
-       , 'witness )
-       wrapped
+    : ( [> `GET ]
+      , Tez.t
+      , Chain_id.t -> Block_id.t -> Address.t -> 'witness
+      , 'witness )
+      wrapped
 end

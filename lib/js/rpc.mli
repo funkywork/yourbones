@@ -37,11 +37,10 @@ val call
   -> ?integrity:string
   -> ?keepalive:bool
   -> node_address:string
-  -> (node_address:string
-      -> ( Nightmare_service.Method.t
-         , 'encoding
-         , 'continuation
-         , ('encoding, [> `Json_error of string | `Http_error of int ]) result
-           Lwt.t )
-         Yourbones.RPC.wrapped)
+  -> ( Nightmare_service.Method.t
+     , 'encoding
+     , 'continuation
+     , ('encoding, [> `Json_error of string | `Http_error of int ]) result Lwt.t
+     )
+     Yourbones.RPC.wrapped
   -> 'continuation

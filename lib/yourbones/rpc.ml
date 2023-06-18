@@ -34,7 +34,8 @@ type ('method_, 'encoding, 'continuation, 'witness) entrypoint =
   }
 
 type ('method_, 'encoding, 'continuation, 'witness) wrapped =
-  unit -> ('method_, 'encoding, 'continuation, 'witness) entrypoint
+  node_address:string
+  -> ('method_, 'encoding, 'continuation, 'witness) entrypoint
 
 module Infix = struct
   let ( ~/ ) constant = Nightmare_service.Path.(add_constant constant root)
@@ -101,20 +102,14 @@ let patch ~encoding path ~node_address =
   { encoding; endpoint }
 ;;
 
+let endpoint_of { endpoint; _ } = endpoint
+
 let method_of entrypoint =
-  let { endpoint; _ } = entrypoint () in
+  let endpoint = endpoint_of entrypoint in
   Nightmare_service.Endpoint.method_of endpoint
 ;;
 
-let encoding_of entrypoint =
-  let { encoding; _ } = entrypoint () in
-  encoding
-;;
-
-let endpoint_of entrypoint =
-  let { endpoint; _ } = entrypoint () in
-  endpoint
-;;
+let encoding_of { encoding; _ } = encoding
 
 module Directory = struct
   module Internal = struct
@@ -125,7 +120,7 @@ module Directory = struct
     let balance () = ~:contract / "balance"
   end
 
-  let get_balance ~node_address () =
+  let get_balance ~node_address =
     get ~encoding:Tez.encoding ~node_address ~:Internal.balance
   ;;
 end

@@ -20,26 +20,49 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** the [Yourbones] module exposes all backend agnostic tools (e.g. as a node,
-    to build an indexer or JavaScript to build the front-end of a dApp).
-
-    It is mainly used to describe data to interact with the chain. *)
-
-(** {1 Common types}
-
-    Exposes all recurring types that are often used (such as [tez]). *)
-
-type tez = Tez.t
-type network_type = Network.Type.t
-
-(** {1 Tezos related modules} *)
-
-module Tez = Tez
-module Address = Address
-module Chain_id = Chain_id
-module Block_id = Block_id
-
-(** {1 Node related modules} *)
-
-module Network = Network
-module RPC = Rpc
+let call
+  ?parameters
+  ?headers
+  ?body
+  ?mode
+  ?credentials
+  ?cache
+  ?redirect
+  ?referrer
+  ?referrer_policy
+  ?integrity
+  ?keepalive
+  ~node_address
+  entrypoint
+  =
+  let entrypoint = entrypoint ~node_address in
+  let endpoint = Yourbones.RPC.endpoint_of entrypoint in
+  let method_ = Yourbones.RPC.method_of entrypoint in
+  let encoding = Yourbones.RPC.encoding_of entrypoint in
+  Nightmare_service.Endpoint.gen_link ?parameters endpoint (fun target ->
+    let open Nightmare_js in
+    let open Lwt.Syntax in
+    let* response =
+      Fetch.fetch
+        ~method_
+        ?headers
+        ?body
+        ?mode
+        ?credentials
+        ?cache
+        ?redirect
+        ?referrer
+        ?referrer_policy
+        ?integrity
+        ?keepalive
+        target
+    in
+    if Fetch.Response.is_ok response
+    then
+      let+ txt = Fetch.Response.text response in
+      txt
+      |> Data_encoding.Json.from_string
+      |> Result.map @@ Data_encoding.Json.destruct encoding
+      |> Result.map_error (fun message -> `Json_error message)
+    else Lwt.return (Error (`Http_error (Fetch.Response.status response))))
+;;

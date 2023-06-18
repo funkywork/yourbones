@@ -20,26 +20,23 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** the [Yourbones] module exposes all backend agnostic tools (e.g. as a node,
-    to build an indexer or JavaScript to build the front-end of a dApp).
+(** Describes the identifier of a chain, mainly used in RPC calls. *)
 
-    It is mainly used to describe data to interact with the chain. *)
+(** {1 Type} *)
 
-(** {1 Common types}
+type t
 
-    Exposes all recurring types that are often used (such as [tez]). *)
+(** {1 Util} *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** [main] returns the current chain. *)
+val main : t
 
-(** {1 Tezos related modules} *)
+(** [identified s] constructs a chain id using a character string. *)
+val identified : string -> t
 
-module Tez = Tez
-module Address = Address
-module Chain_id = Chain_id
-module Block_id = Block_id
+(** {1 Fragment util}
 
-(** {1 Node related modules} *)
+    As the chain identifier is mainly used in RPC calls, it is possible to
+    describe a [chain_id] as a [path] fragment. *)
 
-module Network = Network
-module RPC = Rpc
+val fragment : t Nightmare_service.Path.variable

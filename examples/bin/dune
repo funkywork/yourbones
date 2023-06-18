@@ -8,4 +8,4 @@
  (promote
   (until-clean)
   (only main.bc.js))
- (libraries yourbones yourbones_js-beacon))
+ (libraries yourbones yourbones_js yourbones_js-beacon))

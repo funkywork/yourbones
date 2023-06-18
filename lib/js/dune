@@ -1,0 +1,14 @@
+(library
+ (public_name yourbones_js)
+ (name yourbones_js)
+ (libraries
+  data-encoding
+  yourbones
+  preface
+  nightmare_js
+  js_of_ocaml-compiler.runtime
+  lwt
+  js_of_ocaml-lwt)
+ (modes byte)
+ (preprocess
+  (pps js_of_ocaml-ppx)))

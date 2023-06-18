@@ -20,26 +20,6 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** the [Yourbones] module exposes all backend agnostic tools (e.g. as a node,
-    to build an indexer or JavaScript to build the front-end of a dApp).
+(** Allows you to act with the RPCs of a Tezos node in the JavaScript context. *)
 
-    It is mainly used to describe data to interact with the chain. *)
-
-(** {1 Common types}
-
-    Exposes all recurring types that are often used (such as [tez]). *)
-
-type tez = Tez.t
-type network_type = Network.Type.t
-
-(** {1 Tezos related modules} *)
-
-module Tez = Tez
-module Address = Address
-module Chain_id = Chain_id
-module Block_id = Block_id
-
-(** {1 Node related modules} *)
-
-module Network = Network
 module RPC = Rpc

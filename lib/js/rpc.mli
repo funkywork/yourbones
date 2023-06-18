@@ -20,26 +20,27 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** the [Yourbones] module exposes all backend agnostic tools (e.g. as a node,
-    to build an indexer or JavaScript to build the front-end of a dApp).
+(** Calls RPCs described in the [Yourbones.RPC] framework and automates decoding
+    via [Data_encoding]. *)
 
-    It is mainly used to describe data to interact with the chain. *)
-
-(** {1 Common types}
-
-    Exposes all recurring types that are often used (such as [tez]). *)
-
-type tez = Tez.t
-type network_type = Network.Type.t
-
-(** {1 Tezos related modules} *)
-
-module Tez = Tez
-module Address = Address
-module Chain_id = Chain_id
-module Block_id = Block_id
-
-(** {1 Node related modules} *)
-
-module Network = Network
-module RPC = Rpc
+(** [call ~node_address entrypoint] call an entrypoint of the Tezos Node. *)
+val call
+  :  ?parameters:(string * string) list
+  -> ?headers:Nightmare_js.Headers.t
+  -> ?body:Nightmare_js.Fetch.body
+  -> ?mode:Nightmare_js.Fetch.mode
+  -> ?credentials:Nightmare_js.Fetch.credentials
+  -> ?cache:Nightmare_js.Fetch.cache
+  -> ?redirect:Nightmare_js.Fetch.redirect
+  -> ?referrer:Nightmare_js.Fetch.referrer
+  -> ?referrer_policy:Nightmare_js.Fetch.referrer_policy
+  -> ?integrity:string
+  -> ?keepalive:bool
+  -> node_address:string
+  -> ( Nightmare_service.Method.t
+     , 'encoding
+     , 'continuation
+     , ('encoding, [> `Json_error of string | `Http_error of int ]) result Lwt.t
+     )
+     Yourbones.RPC.wrapped
+  -> 'continuation

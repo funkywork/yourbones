@@ -244,3 +244,15 @@ let equal_error a b =
     -> String.equal x y
   | _ -> false
 ;;
+
+let encoding =
+  let open Data_encoding in
+  let decode = Z.of_int64
+  and encode =
+    Json.wrap_error (fun i ->
+      match Micro.from_int64 (Z.to_int64 i) with
+      | Ok x -> x
+      | Error err -> raise @@ Tez_exception err)
+  in
+  def "mutez" (check_size 10 (conv decode encode n))
+;;

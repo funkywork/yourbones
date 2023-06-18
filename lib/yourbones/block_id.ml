@@ -20,26 +20,29 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** the [Yourbones] module exposes all backend agnostic tools (e.g. as a node,
-    to build an indexer or JavaScript to build the front-end of a dApp).
+type t =
+  | Head
+  | Identified of string
 
-    It is mainly used to describe data to interact with the chain. *)
+let head = Head
+let identified s = Identified s
 
-(** {1 Common types}
+module Fragment = struct
+  type nonrec t = t
 
-    Exposes all recurring types that are often used (such as [tez]). *)
+  let fragment_name = ":block_id"
 
-type tez = Tez.t
-type network_type = Network.Type.t
+  let fragment_from_string repr =
+    Some
+      (match repr with
+       | "head" -> Head
+       | s -> Identified s)
+  ;;
 
-(** {1 Tezos related modules} *)
+  let fragment_to_string = function
+    | Head -> "head"
+    | Identified s -> s
+  ;;
+end
 
-module Tez = Tez
-module Address = Address
-module Chain_id = Chain_id
-module Block_id = Block_id
-
-(** {1 Node related modules} *)
-
-module Network = Network
-module RPC = Rpc
+let fragment = Nightmare_service.Path.variable' (module Fragment)

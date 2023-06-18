@@ -60,3 +60,4 @@ val pp : Format.formatter -> t -> unit
 val equal : t -> t -> bool
 val pp_error : Format.formatter -> error -> unit
 val equal_error : error -> error -> bool
+val fragment : t Nightmare_service.Path.variable

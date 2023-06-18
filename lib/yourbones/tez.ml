@@ -252,7 +252,7 @@ let encoding =
     Json.wrap_error (fun i ->
       match Micro.from_int64 (Z.to_int64 i) with
       | Ok x -> x
-      | Error _ -> assert false)
+      | Error err -> raise @@ Tez_exception err)
   in
   def "mutez" (check_size 10 (conv decode encode n))
 ;;

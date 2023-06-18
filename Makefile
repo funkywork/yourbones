@@ -51,6 +51,7 @@ local-deps:
 	opam install . --deps-only --with-doc --with-test -y
 
 pinned-deps: local-deps
+	opam install nightmare-test -y
 	opam install nightmare nightmare_js -y
 
 # [make deps] will fetch the local and the pinned deps.

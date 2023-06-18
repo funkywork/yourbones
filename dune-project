@@ -27,6 +27,7 @@
   zarith
   tezos-base58
   (nightmare :pinned)
+  (nightmare-test (and :pinned :with-test))
   (odoc :with-doc)
   (alcotest :with-test)))
 

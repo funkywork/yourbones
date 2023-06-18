@@ -18,6 +18,7 @@ depends: [
   "zarith"
   "tezos-base58"
   "nightmare" {pinned}
+  "nightmare-test" {pinned & with-test}
   "odoc" {with-doc}
   "alcotest" {with-test}
 ]
@@ -38,5 +39,6 @@ build: [
 dev-repo: "git+https://github.com/funkywork/yourbones.git"
 pin-depends: [
   ["nightmare.dev" "git+https://github.com/funkywork/nightmare.git"]
+  ["nightmare-test.dev" "git+https://github.com/funkywork/nightmare.git"]
   ["nightmare_js.dev" "git+https://github.com/funkywork/nightmare.git"]
 ]

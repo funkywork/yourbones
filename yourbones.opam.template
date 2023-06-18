@@ -1,4 +1,5 @@
 pin-depends: [
   ["nightmare.dev" "git+https://github.com/funkywork/nightmare.git"]
+  ["nightmare-test.dev" "git+https://github.com/funkywork/nightmare.git"]
   ["nightmare_js.dev" "git+https://github.com/funkywork/nightmare.git"]
 ]

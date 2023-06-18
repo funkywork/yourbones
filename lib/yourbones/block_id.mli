@@ -31,8 +31,8 @@ type t
 (** [head] returns the head of the chain. *)
 val head : t
 
-(** [identifier s] constructs a block id using a character string. *)
-val identifier : string -> t
+(** [identified s] constructs a block id using a character string. *)
+val identified : string -> t
 
 (** {1 Fragment util}
 

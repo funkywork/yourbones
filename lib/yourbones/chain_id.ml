@@ -25,7 +25,7 @@ type t =
   | Identified of string
 
 let main = Main
-let identifier s = Identified s
+let identified s = Identified s
 
 module Fragment = struct
   type nonrec t = t

@@ -31,8 +31,8 @@ type t
 (** [main] returns the current chain. *)
 val main : t
 
-(** [identifier s] constructs a chain id using a character string. *)
-val identifier : string -> t
+(** [identified s] constructs a chain id using a character string. *)
+val identified : string -> t
 
 (** {1 Fragment util}
 

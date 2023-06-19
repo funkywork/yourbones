@@ -20,28 +20,28 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** the [Yourbones] module exposes all backend agnostic tools (e.g. as a node,
-    to build an indexer or JavaScript to build the front-end of a dApp).
+(** A monitored head is the result of observing the head of the chain.
+    Essentially, it allows you to retrieve the current block (and its
+    predecessor). Some additional information will be added as the library
+    develops. *)
 
-    It is mainly used to describe data to interact with the chain. *)
+(** {1 Types} *)
 
-(** {1 Common types}
+type t = private
+  { hash : Block_hash.t
+  ; level : int
+  ; proto : int
+  ; predecessor : Block_hash.t
+  ; validation_passes : int
+  ; timestamp : string (* TODO: Fix the timestamp representation *)
+  ; fitness : string list (* TODO: Fix fitness representation *)
+  ; context : string (* TODO: Fix the context_hash representation *)
+  ; operations_hash : string
+      (* TODO: Fix operation hash list list representation*)
+  ; protocol_data : string (* FIXME: fix protocol data representation*)
+  }
 
-    Exposes all recurring types that are often used (such as [tez]). *)
+(** {1 Util} *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
-
-(** {1 Tezos related modules} *)
-
-module Tez = Tez
-module Address = Address
-module Block_hash = Block_hash
-module Chain_id = Chain_id
-module Block_id = Block_id
-module Block_header = Block_header
-
-(** {1 Node related modules} *)
-
-module Network = Network
-module RPC = Rpc
+(** Data encoder for monitored head*)
+val encoding : t Data_encoding.t

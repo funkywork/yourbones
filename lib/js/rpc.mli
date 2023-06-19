@@ -40,7 +40,47 @@ val call
   -> ( Nightmare_service.Method.t
      , 'encoding
      , 'continuation
-     , ('encoding, [> `Json_error of string | `Http_error of int ]) result Lwt.t
-     )
+     , ( 'encoding
+       , [> `Json_error of string | `Json_exn of exn | `Http_error of int ] )
+       result
+       Lwt.t )
+     Yourbones.RPC.wrapped
+  -> 'continuation
+
+(** [stream ~on_chunk ~node_address ~entrypoint] stream an entrypoint (ie: head
+    monitoring) and perform [on_chunk] on each new bunch of data. *)
+val stream
+  :  ?retention_policy:
+       [< `Restart_after of float
+       | `Raise of
+         exn
+         -> ( unit
+            , ([> `Json_error of string
+               | `Json_exn of exn
+               | `Http_error of int
+               | `On_chunk of 'new_errors
+               ]
+               as
+               'errors) )
+            result
+            Lwt.t > `Restart_after
+       ]
+  -> ?parameters:(string * string) list
+  -> ?headers:Nightmare_js.Headers.t
+  -> ?body:Nightmare_js.Fetch.body
+  -> ?mode:Nightmare_js.Fetch.mode
+  -> ?credentials:Nightmare_js.Fetch.credentials
+  -> ?cache:Nightmare_js.Fetch.cache
+  -> ?redirect:Nightmare_js.Fetch.redirect
+  -> ?referrer:Nightmare_js.Fetch.referrer
+  -> ?referrer_policy:Nightmare_js.Fetch.referrer_policy
+  -> ?integrity:string
+  -> ?keepalive:bool
+  -> on_chunk:('encoding -> (unit, 'new_errors) result Lwt.t)
+  -> node_address:string
+  -> ( Nightmare_service.Method.t
+     , 'encoding
+     , 'continuation
+     , (unit, 'errors) result Lwt.t )
      Yourbones.RPC.wrapped
   -> 'continuation

@@ -3,8 +3,18 @@ open Beacon
 open Js_of_ocaml_lwt
 
 let (Network.{ type_ = preferred_network; _ } as network) = Network.ghostnet ()
+let node_address = "https://ghostnet.ecadinfra.com"
 
-let mount client account tez =
+let mount client account =
+  let open Lwt.Syntax in
+  let* tez =
+    Yourbones_js.RPC.call
+      ~node_address
+      Yourbones.RPC.Directory.get_balance
+      Yourbones.Chain_id.main
+      Yourbones.Block_id.head
+      account.Account_info.address
+  in
   let tez = Result.fold ~ok:(fun x -> x) ~error:(fun _ -> 0t) tez in
   let app = Dom_html.getElementById "app" in
   let message =
@@ -17,8 +27,20 @@ let mount client account tez =
   in
   let () = app##.innerHTML := Js.string message in
   let btn = Dom_html.getElementById "send-tez" in
+  let* _ =
+    let container = Dom_html.getElementById "block-header" in
+    Yourbones_js.RPC.stream
+      ~on_chunk:(fun header ->
+        let () = Nightmare_js.Console.(string log) "new block" in
+        let hash = header.Yourbones.Block_header.hash in
+        let value = Yourbones.Block_hash.to_string hash in
+        let () = container##.innerHTML := Js.string value in
+        Lwt.return_ok ())
+      ~node_address
+      Yourbones.RPC.Directory.monitor_heads
+      Yourbones.Chain_id.main
+  in
   Lwt_js_events.(async_loop click) btn (fun _ _ ->
-    let open Lwt.Syntax in
     let+ result =
       Dapp_client.request_simple_transaction
         ~destination:[%address "tz1XxRjkB77R1rnxVRGQxmWAcG1cGQQeMAAL"]
@@ -43,28 +65,11 @@ let _ =
       let* result = Dapp_client.request_permissions ~network client in
       match result with
       | Ok Permission_response_output.{ account_info; _ } ->
-        let* tez =
-          Yourbones_js.RPC.call
-            ~node_address:"https://ghostnet.ecadinfra.com"
-            Yourbones.RPC.Directory.get_balance
-            Yourbones.Chain_id.main
-            Yourbones.Block_id.head
-            account_info.address
-        in
-        mount client account_info tez
+        mount client account_info
       | Error (`Request_permissions_rejection _) ->
         let () =
           Nightmare_js.Console.(string error) "Request_permissions_rejection"
         in
         Lwt.return_unit)
-  | Some account ->
-    let* tez =
-      Yourbones_js.RPC.call
-        ~node_address:"https://ghostnet.ecadinfra.com"
-        Yourbones.RPC.Directory.get_balance
-        Yourbones.Chain_id.main
-        Yourbones.Block_id.head
-        account.address
-    in
-    mount client account tez
+  | Some account -> mount client account
 ;;

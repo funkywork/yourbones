@@ -154,4 +154,9 @@ module Directory : sig
       , Chain_id.t -> Block_id.t -> Address.t -> 'witness
       , 'witness )
       wrapped
+
+  (** [monitor_heads ~node_address] describes the entrypoint
+      [GET /monitor/heads/<chain_id> (GET)] *)
+  val monitor_heads
+    : ([> `GET ], Block_header.t, Chain_id.t -> 'witness, 'witness) wrapped
 end

@@ -29,4 +29,5 @@ module Address = Address
 module Block_hash = Block_hash
 module Chain_id = Chain_id
 module Block_id = Block_id
+module Block_header = Block_header
 module RPC = Rpc

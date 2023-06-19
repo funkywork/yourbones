@@ -118,9 +118,14 @@ module Directory = struct
     let context () = ~:block_by_id / "context"
     let contract () = ~:context / "contracts" /: Address.fragment
     let balance () = ~:contract / "balance"
+    let monitor_heads () = ~/"monitor" / "heads" /: Chain_id.fragment
   end
 
   let get_balance ~node_address =
     get ~encoding:Tez.encoding ~node_address ~:Internal.balance
+  ;;
+
+  let monitor_heads ~node_address =
+    get ~encoding:Block_header.encoding ~node_address ~:Internal.monitor_heads
   ;;
 end

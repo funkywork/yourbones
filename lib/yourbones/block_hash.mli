@@ -20,13 +20,39 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** A representation of a Block hash. *)
 
-module Tez = Tez
-module Network = Network
-module Address = Address
-module Block_hash = Block_hash
-module Chain_id = Chain_id
-module Block_id = Block_id
-module RPC = Rpc
+(** {1 Types} *)
+
+(** A blockhash is a string encoded in base58.*)
+type t
+
+(** Errors related to Address. *)
+type error =
+  [ `Block_hash_invalid_length of string
+  | `Block_hash_invalid_checksum of string
+  ]
+
+(** An exception used to lift [error] into an exception. *)
+exception Block_hash_exception of error
+
+(** {1 API}*)
+
+(** {2 COnstructing block_hash from string} *)
+
+(** [from_string hash] lift a string into a hash, the hash is wrapped into a
+    result. *)
+val from_string : string -> (t, [> error ]) result
+
+(** an exception ful version of [from_string]. *)
+val from_string' : string -> t
+
+(** {2 Util} *)
+
+val to_string : t -> string
+val pp : Format.formatter -> t -> unit
+val equal : t -> t -> bool
+val pp_error : Format.formatter -> error -> unit
+val equal_error : error -> error -> bool
+val fragment : t Nightmare_service.Path.variable
+val encoding : t Data_encoding.t

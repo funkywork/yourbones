@@ -20,13 +20,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-type tez = Tez.t
-type network_type = Network.Type.t
+(** The presence of an [mli] file may seem a bit excessive, but it is mainly to
+    quickly identify unused tests. *)
 
-module Tez = Tez
-module Network = Network
-module Address = Address
-module Block_hash = Block_hash
-module Chain_id = Chain_id
-module Block_id = Block_id
-module RPC = Rpc
+(** List of all test-cases. *)
+val cases : string * unit Alcotest.test_case list

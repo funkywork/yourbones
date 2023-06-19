@@ -24,7 +24,7 @@
 
 (** {1 Types} *)
 
-(** An address is a string encoded in base58..*)
+(** An address is a string encoded in base58.*)
 type t
 
 (** Errors related to Address. *)
@@ -45,13 +45,13 @@ exception Address_exception of error
     into a result. *)
 val from_string : string -> (t, [> error ]) result
 
+(** an exception ful version of [from_string]. *)
+val from_string' : string -> t
+
 val tz1 : string -> (t, [> error ]) result
 val tz2 : string -> (t, [> error ]) result
 val tz3 : string -> (t, [> error ]) result
 val kt1 : string -> (t, [> error ]) result
-
-(** an exception ful version of [from_string]. *)
-val from_string' : string -> t
 
 (** {2 Util} *)
 

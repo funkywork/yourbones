@@ -63,5 +63,3 @@ deps: pinned-deps dev-deps
 
 js_stubs:
 	(cd lib/beacon/stubs; npm install; npm run build)
-	# FIXME: Awaiting for linking runtime beacon_stubs
-	cp lib/beacon/stubs/beacon_stubs.js examples/bin/beacon_stubs.js

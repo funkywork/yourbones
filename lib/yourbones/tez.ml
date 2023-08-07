@@ -62,22 +62,24 @@ let div x d =
   else Ok (Int64.div x d)
 ;;
 
-module Make (Previous : sig
-  type t = int64
+module Make
+    (Previous : sig
+       type t = int64
 
-  val one : t
+       val one : t
 
-  val from_int64
-    :  int64
-    -> ( t
-       , [> `Tez_negative_amount of int64
-         | `Tez_overflow
-         | `Tez_invalid_multiplicator of int64
-         ] )
-       result
-end) (Current : sig
-  val one : Previous.t
-end) =
+       val from_int64
+         :  int64
+         -> ( t
+            , [> `Tez_negative_amount of int64
+              | `Tez_overflow
+              | `Tez_invalid_multiplicator of int64
+              ] )
+            result
+     end)
+    (Current : sig
+       val one : Previous.t
+     end) =
 struct
   type t = int64
 

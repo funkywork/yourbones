@@ -27,8 +27,8 @@ let tez_testable = Alcotest.testable (Tez.pp ()) Tez.equal
 let tez_error_testable = Alcotest.testable Tez.pp_error Tez.equal_error
 
 module Result = Preface.Result.Monad (struct
-  type t = Tez.error
-end)
+    type t = Tez.error
+  end)
 
 let test_from_int_1 =
   test_equality
@@ -172,14 +172,14 @@ let test_add_succeed =
     ~desc:"test add without overflow"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.from_int 42
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int 20 in
-      let* b = Tez.from_int 22 in
-      Tez.add a b
-    in
-    expected, computed)
+      let expected = Tez.from_int 42
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int 20 in
+        let* b = Tez.from_int 22 in
+        Tez.add a b
+      in
+      expected, computed)
 ;;
 
 let test_add_succeed_with_different_basis =
@@ -188,16 +188,16 @@ let test_add_succeed_with_different_basis =
     ~desc:"test add without overflow and multiple basis"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.Micro.from_int 20_000_053
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int 20 in
-      let* b = Tez.Micro.from_int 22 in
-      let* c = Tez.Micro.from_int 31 in
-      let* x = Tez.add a b in
-      Tez.add x c
-    in
-    expected, computed)
+      let expected = Tez.Micro.from_int 20_000_053
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int 20 in
+        let* b = Tez.Micro.from_int 22 in
+        let* c = Tez.Micro.from_int 31 in
+        let* x = Tez.add a b in
+        Tez.add x c
+      in
+      expected, computed)
 ;;
 
 let test_add_succeed_with_different_basis_using_infix =
@@ -206,12 +206,12 @@ let test_add_succeed_with_different_basis_using_infix =
     ~desc:"test add without overflow using infix operators"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.Micro.from_int 20_000_053
-    and computed =
-      let open Tez.Infix in
-      Tez.from_int 20 |+| Tez.Micro.from_int 22 |+| Tez.Micro.from_int 31
-    in
-    expected, computed)
+      let expected = Tez.Micro.from_int 20_000_053
+      and computed =
+        let open Tez.Infix in
+        Tez.from_int 20 |+| Tez.Micro.from_int 22 |+| Tez.Micro.from_int 31
+      in
+      expected, computed)
 ;;
 
 let test_add_with_overflow =
@@ -220,14 +220,14 @@ let test_add_with_overflow =
     ~desc:"test add with overflow"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Error `Tez_overflow
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.Micro.from_int64 Int64.(sub max_int 2L) in
-      let* b = Tez.from_int 4 in
-      Tez.add a b
-    in
-    expected, computed)
+      let expected = Error `Tez_overflow
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.Micro.from_int64 Int64.(sub max_int 2L) in
+        let* b = Tez.from_int 4 in
+        Tez.add a b
+      in
+      expected, computed)
 ;;
 
 let test_sub_succeed =
@@ -236,14 +236,14 @@ let test_sub_succeed =
     ~desc:"test sub without overflow"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.from_int 42
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int 64 in
-      let* b = Tez.from_int 22 in
-      Tez.sub a b
-    in
-    expected, computed)
+      let expected = Tez.from_int 42
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int 64 in
+        let* b = Tez.from_int 22 in
+        Tez.sub a b
+      in
+      expected, computed)
 ;;
 
 let test_sub_succeed_with_different_basis =
@@ -252,16 +252,16 @@ let test_sub_succeed_with_different_basis =
     ~desc:"test sub without overflow and multiple basis"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.Micro.from_int 19_999_947
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int 20 in
-      let* b = Tez.Micro.from_int 22 in
-      let* c = Tez.Micro.from_int 31 in
-      let* x = Tez.sub a b in
-      Tez.sub x c
-    in
-    expected, computed)
+      let expected = Tez.Micro.from_int 19_999_947
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int 20 in
+        let* b = Tez.Micro.from_int 22 in
+        let* c = Tez.Micro.from_int 31 in
+        let* x = Tez.sub a b in
+        Tez.sub x c
+      in
+      expected, computed)
 ;;
 
 let test_sub_succeed_with_different_basis_using_infix =
@@ -270,12 +270,12 @@ let test_sub_succeed_with_different_basis_using_infix =
     ~desc:"test sub without overflow using infix operators"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.Micro.from_int 19_999_947
-    and computed =
-      let open Tez.Infix in
-      Tez.from_int 20 |-| Tez.Micro.from_int 22 |-| Tez.Micro.from_int 31
-    in
-    expected, computed)
+      let expected = Tez.Micro.from_int 19_999_947
+      and computed =
+        let open Tez.Infix in
+        Tez.from_int 20 |-| Tez.Micro.from_int 22 |-| Tez.Micro.from_int 31
+      in
+      expected, computed)
 ;;
 
 let test_sub_with_underflow =
@@ -284,14 +284,14 @@ let test_sub_with_underflow =
     ~desc:"test sub with underflow"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Error (`Tez_negative_amount (-1L))
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.Micro.from_int64 1L in
-      let* b = Tez.Micro.from_int 2 in
-      Tez.sub a b
-    in
-    expected, computed)
+      let expected = Error (`Tez_negative_amount (-1L))
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.Micro.from_int64 1L in
+        let* b = Tez.Micro.from_int 2 in
+        Tez.sub a b
+      in
+      expected, computed)
 ;;
 
 let test_mul_succeed =
@@ -300,14 +300,14 @@ let test_mul_succeed =
     ~desc:"test mul valid"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.from_int 220
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int 22 in
-      let b = 10L in
-      Tez.mul a b
-    in
-    expected, computed)
+      let expected = Tez.from_int 220
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int 22 in
+        let b = 10L in
+        Tez.mul a b
+      in
+      expected, computed)
 ;;
 
 let test_mul_micro_succeed =
@@ -316,14 +316,14 @@ let test_mul_micro_succeed =
     ~desc:"test mul with micro valid"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.Micro.from_int 220
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.Micro.from_int 22 in
-      let b = 10L in
-      Tez.mul a b
-    in
-    expected, computed)
+      let expected = Tez.Micro.from_int 220
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.Micro.from_int 22 in
+        let b = 10L in
+        Tez.mul a b
+      in
+      expected, computed)
 ;;
 
 let test_mul_negative_multiplicator =
@@ -332,14 +332,14 @@ let test_mul_negative_multiplicator =
     ~desc:"test mul invalid multiplicator"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Error (`Tez_invalid_multiplicator (-2L))
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int 22 in
-      let b = -2L in
-      Tez.mul a b
-    in
-    expected, computed)
+      let expected = Error (`Tez_invalid_multiplicator (-2L))
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int 22 in
+        let b = -2L in
+        Tez.mul a b
+      in
+      expected, computed)
 ;;
 
 let test_mul_overflow =
@@ -348,14 +348,14 @@ let test_mul_overflow =
     ~desc:"test mul overflow"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Error `Tez_overflow
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int64 Int64.(div max_int 2L |> succ) in
-      let b = 2L in
-      Tez.mul a b
-    in
-    expected, computed)
+      let expected = Error `Tez_overflow
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int64 Int64.(div max_int 2L |> succ) in
+        let b = 2L in
+        Tez.mul a b
+      in
+      expected, computed)
 ;;
 
 let test_div_valid =
@@ -364,14 +364,14 @@ let test_div_valid =
     ~desc:"test div with succeed"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.from_int 210
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int 420 in
-      let b = 2L in
-      Tez.div a b
-    in
-    expected, computed)
+      let expected = Tez.from_int 210
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int 420 in
+        let b = 2L in
+        Tez.div a b
+      in
+      expected, computed)
 ;;
 
 let test_div_with_null_divisor =
@@ -380,14 +380,14 @@ let test_div_with_null_divisor =
     ~desc:"test div with null division"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Error (`Tez_invalid_divisor 0L)
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int 420 in
-      let b = 0L in
-      Tez.div a b
-    in
-    expected, computed)
+      let expected = Error (`Tez_invalid_divisor 0L)
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int 420 in
+        let b = 0L in
+        Tez.div a b
+      in
+      expected, computed)
 ;;
 
 let test_div_with_negative_divisor =
@@ -396,14 +396,14 @@ let test_div_with_negative_divisor =
     ~desc:"test div with negative division"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Error (`Tez_invalid_divisor (-30L))
-    and computed =
-      let open Result.Syntax in
-      let* a = Tez.from_int 420 in
-      let b = -30L in
-      Tez.div a b
-    in
-    expected, computed)
+      let expected = Error (`Tez_invalid_divisor (-30L))
+      and computed =
+        let open Result.Syntax in
+        let* a = Tez.from_int 420 in
+        let b = -30L in
+        Tez.div a b
+      in
+      expected, computed)
 ;;
 
 let test_from_string_1 =
@@ -412,9 +412,9 @@ let test_from_string_1 =
     ~desc:"use from_string for producing a tez"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.(from_int 20 |+| Micro.from_int 112)
-    and computed = Tez.from_string "20.000112" in
-    expected, computed)
+      let expected = Tez.(from_int 20 |+| Micro.from_int 112)
+      and computed = Tez.from_string "20.000112" in
+      expected, computed)
 ;;
 
 let test_from_string_2 =
@@ -423,9 +423,9 @@ let test_from_string_2 =
     ~desc:"use from_string for producing a tez"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Tez.(from_int 2000007)
-    and computed = Tez.from_string "2000007" in
-    expected, computed)
+      let expected = Tez.(from_int 2000007)
+      and computed = Tez.from_string "2000007" in
+      expected, computed)
 ;;
 
 let test_from_string_3 =
@@ -434,9 +434,9 @@ let test_from_string_3 =
     ~desc:"use from_string for producing a tez"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Error (`Tez_invalid_string_representation "-2000007")
-    and computed = Tez.from_string "-2000007" in
-    expected, computed)
+      let expected = Error (`Tez_invalid_string_representation "-2000007")
+      and computed = Tez.from_string "-2000007" in
+      expected, computed)
 ;;
 
 let test_from_string_4 =
@@ -445,9 +445,10 @@ let test_from_string_4 =
     ~desc:"use from_string for producing a tez"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Error (`Tez_invalid_string_representation "2000007.ffoo-bar")
-    and computed = Tez.from_string "2000007.ffoo-bar" in
-    expected, computed)
+      let expected =
+        Error (`Tez_invalid_string_representation "2000007.ffoo-bar")
+      and computed = Tez.from_string "2000007.ffoo-bar" in
+      expected, computed)
 ;;
 
 let test_from_string_5 =
@@ -456,9 +457,9 @@ let test_from_string_5 =
     ~desc:"use from_string for producing a tez"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-    let expected = Error (`Tez_invalid_string_representation "2000007.-25")
-    and computed = Tez.from_string "2000007.-25" in
-    expected, computed)
+      let expected = Error (`Tez_invalid_string_representation "2000007.-25")
+      and computed = Tez.from_string "2000007.-25" in
+      expected, computed)
 ;;
 
 let test_infix_comparator =

@@ -28,8 +28,8 @@ let address_error_testable =
 ;;
 
 module Result = Preface.Result.Monad (struct
-  type t = Address.error
-end)
+    type t = Address.error
+  end)
 
 let test_tz1_valid_address =
   test_equality

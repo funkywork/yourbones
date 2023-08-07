@@ -28,8 +28,8 @@ let hash_error_testable =
 ;;
 
 module Result = Preface.Result.Monad (struct
-  type t = Block_hash.error
-end)
+    type t = Block_hash.error
+  end)
 
 let test_from_string_valid_1 =
   test_equality

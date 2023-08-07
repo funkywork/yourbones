@@ -22,8 +22,7 @@
 
 (** Dapp_client allows interaction with Beacon to orchestrate a wallet from a
     web browser. It is a functional wrapper on top of :
-    {{:https://typedocs.walletbeacon.io/classes/dappclient.html#constructor}
-      DAppCLient}. *)
+    {{:https://typedocs.walletbeacon.io/classes/dappclient.html#constructor} DAppCLient}. *)
 
 (** {1 Types} *)
 
@@ -36,7 +35,7 @@ type t
     order to give more information about the application.
 
     {{:https://typedocs.walletbeacon.io/interfaces/dappclientoptions.html} See
-      for more information}. *)
+    for more information}. *)
 val make
   :  ?app_url:string
   -> ?color_mode:Color_mode.t

@@ -44,6 +44,7 @@ let test_pretty_printers_with_given_precision =
           ; "123.456"
           ; "123.45"
           ; "123.4"
+          ; "123"
           ]
       and computed =
         let open Result.Syntax in
@@ -51,7 +52,7 @@ let test_pretty_printers_with_given_precision =
         List.map
           (fun floating_part ->
             Format.asprintf "%a" (Tez.pp ~floating_part ()) res)
-          [ `Six; `Five; `Four; `Three; `Two; `One ]
+          [ `Six; `Five; `Four; `Three; `Two; `One; `None ]
       in
       expected, computed)
 ;;

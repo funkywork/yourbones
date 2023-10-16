@@ -185,8 +185,13 @@ let pp ?(floating_part = `Six) () ppf value =
     Format.fprintf ppf "%Li.%06Li" left right
 ;;
 
+let pp_print_with ?(floating_part = `Six) () ppf value =
+  let pp = pp ~floating_part () in
+  Format.fprintf ppf "%a%s" pp value symbol
+;;
+
 let pp_print ppf value =
-  let pp = pp ~floating_part:`Six () in
+  let pp = pp () in
   Format.fprintf ppf "%a%s" pp value symbol
 ;;
 

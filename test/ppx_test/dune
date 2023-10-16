@@ -2,4 +2,5 @@
  (deps
   (package yourbones)
   (package yourbones-ppx))
+ (libraries yourbones yourbones-ppx)
  (preludes prelude.ml))

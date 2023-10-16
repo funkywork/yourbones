@@ -68,6 +68,14 @@ val pp
   -> unit
 
 (** Pretty-printer with suffix *)
+val pp_print_with
+  :  ?floating_part:[ `None | `One | `Two | `Three | `Four | `Five | `Six ]
+  -> unit
+  -> Format.formatter
+  -> t
+  -> unit
+
+(** Pretty-printer with suffix and fixed to six *)
 val pp_print : Format.formatter -> t -> unit
 
 (** [to_mutez x] returns the result as [int64] in [mutez]. *)

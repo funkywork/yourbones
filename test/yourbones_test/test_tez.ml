@@ -30,6 +30,33 @@ module Result = Preface.Result.Monad (struct
     type t = Tez.error
   end)
 
+let test_pretty_printers_with_given_precision =
+  test_equality
+    ~about:"pp"
+    ~desc:"when a precision is given, it should truncate the render"
+    Alcotest.(result (list string) tez_error_testable)
+    (fun () ->
+      let expected =
+        Ok
+          [ "123.456789"
+          ; "123.45678"
+          ; "123.4567"
+          ; "123.456"
+          ; "123.45"
+          ; "123.4"
+          ; "123"
+          ]
+      and computed =
+        let open Result.Syntax in
+        let+ res = Tez.from_mutez 123456789L in
+        List.map
+          (fun floating_part ->
+            Format.asprintf "%a" (Tez.pp ~floating_part ()) res)
+          [ `Six; `Five; `Four; `Three; `Two; `One; `None ]
+      in
+      expected, computed)
+;;
+
 let test_from_int_1 =
   test_equality
     ~about:"from_int"
@@ -523,7 +550,8 @@ let test_infix_comparator =
 
 let cases =
   ( "Tez"
-  , [ test_from_int_1
+  , [ test_pretty_printers_with_given_precision
+    ; test_from_int_1
     ; test_from_int64_1_micro
     ; test_from_int64
     ; test_from_succ

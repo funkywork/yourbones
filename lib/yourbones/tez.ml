@@ -160,23 +160,23 @@ let pp ?(floating_part = `Six) () ppf value =
   match floating_part with
   | `None -> Format.fprintf ppf "%Li" left
   | `One ->
-    let divider = Int64.div Micro.one 100_000L in
+    let divider = 100_000L in
     let right = Int64.div (Int64.rem value one) divider in
     Format.fprintf ppf "%Li.%01Li" left right
   | `Two ->
-    let divider = Int64.div Micro.one 10_000L in
+    let divider = 10_000L in
     let right = Int64.div (Int64.rem value one) divider in
     Format.fprintf ppf "%Li.%02Li" left right
   | `Three ->
-    let divider = Int64.div Micro.one 1000L in
+    let divider = 1000L in
     let right = Int64.div (Int64.rem value one) divider in
     Format.fprintf ppf "%Li.%03Li" left right
   | `Four ->
-    let divider = Int64.div Micro.one 100L in
+    let divider = 100L in
     let right = Int64.div (Int64.rem value one) divider in
     Format.fprintf ppf "%Li.%04Li" left right
   | `Five ->
-    let divider = Int64.div Micro.one 10L in
+    let divider = 10L in
     let right = Int64.div (Int64.rem value one) divider in
     Format.fprintf ppf "%Li.%05Li" left right
   | `Six ->

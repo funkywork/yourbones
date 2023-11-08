@@ -18,8 +18,10 @@ depends: [
   "js_of_ocaml-ppx" {>= "5.3.0"}
   "js_of_ocaml-lwt" {>= "5.3.0"}
   "zarith_stubs_js"
+  "nightmare" {pinned}
   "nightmare_js" {pinned}
   "yourbones" {= version}
+  "yourbones-ppx" {= version}
   "odoc" {with-doc}
 ]
 build: [

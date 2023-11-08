@@ -55,6 +55,7 @@
    (js_of_ocaml-ppx (>= 5.3.0))
    (js_of_ocaml-lwt (>= 5.3.0))
    zarith_stubs_js
+   (nightmare :pinned)
    (nightmare_js :pinned)
    (yourbones (= :version))))
 
@@ -71,5 +72,7 @@
    (js_of_ocaml-ppx (>= 5.3.0))
    (js_of_ocaml-lwt (>= 5.3.0))
    zarith_stubs_js
+   (nightmare :pinned)
    (nightmare_js :pinned)
-   (yourbones (= :version))))
+   (yourbones (= :version))
+   (yourbones-ppx (= :version))))

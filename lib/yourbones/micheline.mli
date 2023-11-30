@@ -157,13 +157,27 @@ module Canonical : sig
   (** {2 Extract data from AST} *)
 
   (** [annotation canonical] returns the annotation attached to a canonical node. *)
-  val annotation : 'prim t -> annotation
+  val annotation : 'primitive t -> annotation
 
   (** [location canonical] returns the location attached to a canonical node. *)
-  val location : 'prim t -> location
+  val location : 'primitive t -> location
 
   (** {2 Helpers} *)
 
   (** Equality between canonical micheline expression. *)
-  val equal : ('prim -> 'prim -> bool) -> 'prim t -> 'prim t -> bool
+  val equal
+    :  ('primitive -> 'primitive -> bool)
+    -> 'primitive t
+    -> 'primitive t
+    -> bool
 end
+
+(** {1 Encoding} *)
+
+(** [Data_encoding] for Micheline expression using an integer as location. *)
+val encoding : 'primitive Data_encoding.t -> (int, 'primitive) t Data_encoding.t
+
+(** [Data_encoding] for Canonical Micheline Expression. *)
+val canonical_encoding
+  :  'primitive Data_encoding.t
+  -> 'primitive Canonical.t Data_encoding.t

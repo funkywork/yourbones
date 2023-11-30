@@ -186,3 +186,161 @@ module Canonical = struct
     equal Int.equal prim_equal a b
   ;;
 end
+
+let canonical_encoding prim_encoding =
+  let open Data_encoding in
+  let int_encoding tag =
+    case
+      tag
+      (obj1 (req "int" z))
+      ~title:"Int"
+      (function
+       | Int (_, x) -> Some x
+       | _ -> None)
+      (fun x -> Int (0, x))
+  in
+  let string_encoding tag =
+    case
+      tag
+      (obj1 (req "string" string))
+      ~title:"String"
+      (function
+       | String (_, x) -> Some x
+       | _ -> None)
+      (fun x -> String (0, x))
+  in
+  let bytes_encoding tag =
+    case
+      tag
+      (obj1 (req "bytes" bytes))
+      ~title:"bytes"
+      (function
+       | Bytes (_, x) -> Some x
+       | _ -> None)
+      (fun x -> Bytes (0, x))
+  in
+  let seq_encoding tag fixpoint =
+    case
+      tag
+      (list fixpoint)
+      ~title:"Sequence"
+      (function
+       | Seq (_, x) -> Some x
+       | _ -> None)
+      (fun x -> Seq (0, x))
+  in
+  let annots_encoding =
+    (* FIXME: Some checks should be added. *)
+    splitted
+      ~json:(list (Bounded.string 255))
+      ~binary:(conv (String.concat " ") (String.split_on_char ' ') string)
+  in
+  let application_encoding tag fixpoint =
+    case
+      tag
+      ~title:"Prim__generic"
+      (obj3
+         (req "prim" prim_encoding)
+         (dft "args" (list fixpoint) [])
+         (dft "annots" annots_encoding []))
+      (function
+       | Prim (_, prim, args, annots) -> Some (prim, args, annots)
+       | _ -> None)
+      (fun (prim, args, annots) -> Prim (0, prim, args, annots))
+  in
+  let node_encoding =
+    mu "micheline.expression" (fun fixpoint ->
+      splitted
+        ~json:
+          (union
+             ~tag_size:`Uint8
+             [ int_encoding Json_only
+             ; string_encoding Json_only
+             ; bytes_encoding Json_only
+             ; seq_encoding Json_only fixpoint
+             ; application_encoding Json_only fixpoint
+             ])
+        ~binary:
+          (union
+             ~tag_size:`Uint8
+             [ (* Simple cases *)
+               int_encoding (Tag 0)
+             ; string_encoding (Tag 1)
+             ; seq_encoding (Tag 2) fixpoint
+             ; (* Specific cases with optim *)
+               case
+                 (Tag 3)
+                 ~title:"Prim__no_args__no_annots"
+                 (obj1 (req "prim" prim_encoding))
+                 (function
+                  | Prim (_, x, [], []) -> Some x
+                  | _ -> None)
+                 (fun x -> Prim (0, x, [], []))
+             ; case
+                 (Tag 4)
+                 ~title:"Prim__no_args__some_annots"
+                 (obj2
+                    (req "prim" prim_encoding)
+                    (req "annots" annots_encoding))
+                 (function
+                  | Prim (_, x, [], annots) -> Some (x, annots)
+                  | _ -> None)
+                 (fun (x, annots) -> Prim (0, x, [], annots))
+             ; case
+                 (Tag 5)
+                 ~title:"Prim__1_args__no_annots"
+                 (obj2 (req "prim" prim_encoding) (req "arg" fixpoint))
+                 (function
+                  | Prim (_, x, [ arg ], []) -> Some (x, arg)
+                  | _ -> None)
+                 (fun (x, arg) -> Prim (0, x, [ arg ], []))
+             ; case
+                 (Tag 6)
+                 ~title:"Prim__1_args__some_annots"
+                 (obj3
+                    (req "prim" prim_encoding)
+                    (req "arg" fixpoint)
+                    (req "annots" annots_encoding))
+                 (function
+                  | Prim (_, x, [ arg ], annots) -> Some (x, arg, annots)
+                  | _ -> None)
+                 (fun (x, arg, annots) -> Prim (0, x, [ arg ], annots))
+             ; case
+                 (Tag 7)
+                 ~title:"Prim__2_args__no_annots"
+                 (obj3
+                    (req "prim" prim_encoding)
+                    (req "arg1" fixpoint)
+                    (req "arg2" fixpoint))
+                 (function
+                  | Prim (_, x, [ arg1; arg2 ], []) -> Some (x, arg1, arg2)
+                  | _ -> None)
+                 (fun (x, arg1, arg2) -> Prim (0, x, [ arg1; arg2 ], []))
+             ; case
+                 (Tag 8)
+                 ~title:"Prim__2_args__some_annots"
+                 (obj4
+                    (req "prim" prim_encoding)
+                    (req "arg1" fixpoint)
+                    (req "arg2" fixpoint)
+                    (req "annots" annots_encoding))
+                 (function
+                  | Prim (_, x, [ arg1; arg2 ], annots) ->
+                    Some (x, arg1, arg2, annots)
+                  | _ -> None)
+                 (fun (x, arg1, arg2, annots) ->
+                   Prim (0, x, [ arg1; arg2 ], annots))
+               (* General cases *)
+             ; application_encoding (Tag 9) fixpoint
+             ; bytes_encoding (Tag 10)
+             ]))
+  in
+  conv Canonical.to_node Canonical.from_node node_encoding
+;;
+
+let encoding prim_encoding =
+  Data_encoding.conv
+    Canonical.from_node
+    Canonical.to_node
+    (canonical_encoding prim_encoding)
+;;

@@ -185,6 +185,10 @@ module Canonical = struct
   let equal prim_equal (Canonical a) (Canonical b) =
     equal Int.equal prim_equal a b
   ;;
+
+  let pp pp_primitive ppf (Canonical expr) =
+    Format.fprintf ppf "%a" (pp ~pp_primitive ()) expr
+  ;;
 end
 
 let canonical_encoding prim_encoding =

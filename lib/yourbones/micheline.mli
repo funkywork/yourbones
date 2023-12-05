@@ -170,6 +170,13 @@ module Canonical : sig
     -> 'primitive t
     -> 'primitive t
     -> bool
+
+  (** Pretty-printer for canonical micheline expression*)
+  val pp
+    :  (Format.formatter -> 'primitive -> unit)
+    -> Format.formatter
+    -> 'primitive t
+    -> unit
 end
 
 (** {1 Encoding} *)

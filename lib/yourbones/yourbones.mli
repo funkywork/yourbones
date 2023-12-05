@@ -41,6 +41,11 @@ module Chain_id = Chain_id
 module Block_id = Block_id
 module Block_header = Block_header
 
+(** {2 Micheline and Michelson} *)
+
+module Micheline = Micheline
+module Michelson = Michelson
+
 (** {1 Node related modules} *)
 
 module Network = Network

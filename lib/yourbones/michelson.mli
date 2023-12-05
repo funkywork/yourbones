@@ -437,3 +437,6 @@ val prim_equal : prim -> prim -> bool
 
 (** Pretty printer for {!type:prim}. *)
 val prim_pp : Format.formatter -> prim -> unit
+
+(** Data encoding for {!type:prim}. *)
+val prim_encoding : prim Data_encoding.t

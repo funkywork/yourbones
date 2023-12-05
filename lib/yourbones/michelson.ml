@@ -542,7 +542,7 @@ module Type = struct
   ;;
 end
 
-type prim =
+type t =
   | Keyword of Keyword.t
   | Constant of Constant.t
   | Instruction of Instruction.t
@@ -715,7 +715,7 @@ let namespace = function
   | Constant_hash -> Namespace.Constant_hash
 ;;
 
-let prim_to_string = function
+let to_string = function
   | Keyword kwd -> Keyword.to_string kwd
   | Constant cst -> Constant.to_string cst
   | Instruction ins -> Instruction.to_string ins
@@ -723,7 +723,7 @@ let prim_to_string = function
   | Constant_hash -> "constant"
 ;;
 
-let prim_equal a b =
+let equal a b =
   match a, b with
   | Keyword a, Keyword b -> Keyword.equal a b
   | Constant a, Constant b -> Constant.equal a b
@@ -733,9 +733,9 @@ let prim_equal a b =
   | _ -> false
 ;;
 
-let prim_pp ppf x = Format.fprintf ppf "%s" (prim_to_string x)
+let pp ppf x = Format.fprintf ppf "%s" (to_string x)
 
-let prim_encoding =
+let encoding =
   let open Data_encoding in
   (* WARN: According to:
      https://gitlab.com/tezos/tezos/-/blob/master/src/proto_alpha/lib_protocol/michelson_v1_primitives.ml?ref_type=heads#L612
@@ -901,5 +901,5 @@ let prim_encoding =
         ; i_bytes
         ; i_nat
         ]
-        |> List.map (fun k -> prim_to_string k, k))
+        |> List.map (fun k -> to_string k, k))
 ;;

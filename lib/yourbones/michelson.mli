@@ -240,7 +240,7 @@ module Type : sig
 end
 
 (** The full set of Michelson primitives. *)
-type prim =
+type t =
   | Keyword of Keyword.t
   | Constant of Constant.t
   | Instruction of Instruction.t
@@ -254,189 +254,189 @@ type prim =
 
 (** {2 Keyword primitives} *)
 
-val k_parameter : prim
-val k_storage : prim
-val k_code : prim
-val k_view : prim
+val k_parameter : t
+val k_storage : t
+val k_code : t
+val k_view : t
 
 (** {2 Constant primitives} *)
 
-val d_true : prim
-val d_false : prim
-val d_elt : prim
-val d_left : prim
-val d_right : prim
-val d_none : prim
-val d_some : prim
-val d_pair : prim
-val d_unit : prim
-val d_lambda_rec : prim
+val d_true : t
+val d_false : t
+val d_elt : t
+val d_left : t
+val d_right : t
+val d_none : t
+val d_some : t
+val d_pair : t
+val d_unit : t
+val d_lambda_rec : t
 
 (** {2 Instruction primitives} *)
 
-val i_pack : prim
-val i_unpack : prim
-val i_blake2b : prim
-val i_sha256 : prim
-val i_sha512 : prim
-val i_abs : prim
-val i_add : prim
-val i_amount : prim
-val i_and : prim
-val i_balance : prim
-val i_car : prim
-val i_cdr : prim
-val i_chain_id : prim
-val i_check_signature : prim
-val i_compare : prim
-val i_concat : prim
-val i_cons : prim
-val i_create_account : prim
-val i_create_contract : prim
-val i_implicit_account : prim
-val i_dip : prim
-val i_drop : prim
-val i_dup : prim
-val i_view : prim
-val i_ediv : prim
-val i_empty_big_map : prim
-val i_empty_map : prim
-val i_empty_set : prim
-val i_eq : prim
-val i_exec : prim
-val i_apply : prim
-val i_failwith : prim
-val i_ge : prim
-val i_get : prim
-val i_get_and_update : prim
-val i_gt : prim
-val i_hash_key : prim
-val i_if : prim
-val i_if_cons : prim
-val i_if_left : prim
-val i_if_none : prim
-val i_int : prim
-val i_lambda : prim
-val i_lambda_rec : prim
-val i_le : prim
-val i_left : prim
-val i_level : prim
-val i_loop : prim
-val i_lsl : prim
-val i_lsr : prim
-val i_lt : prim
-val i_map : prim
-val i_mem : prim
-val i_mul : prim
-val i_neg : prim
-val i_neq : prim
-val i_nil : prim
-val i_none : prim
-val i_not : prim
-val i_now : prim
-val i_min_block_time : prim
-val i_or : prim
-val i_pair : prim
-val i_unpair : prim
-val i_push : prim
-val i_right : prim
-val i_size : prim
-val i_some : prim
-val i_source : prim
-val i_sender : prim
-val i_self : prim
-val i_self_address : prim
-val i_slice : prim
-val i_steps_to_quota : prim
-val i_sub : prim
-val i_sub_mutez : prim
-val i_swap : prim
-val i_transfer_tokens : prim
-val i_set_delegate : prim
-val i_unit : prim
-val i_update : prim
-val i_xor : prim
-val i_iter : prim
-val i_loop_left : prim
-val i_address : prim
-val i_contract : prim
-val i_isnat : prim
-val i_cast : prim
-val i_rename : prim
-val i_sapling_empty_state : prim
-val i_sapling_verify_update : prim
-val i_dig : prim
-val i_dug : prim
-val i_never : prim
-val i_voting_power : prim
-val i_total_voting_power : prim
-val i_keccak : prim
-val i_sha3 : prim
-val i_pairing_check : prim
-val i_ticket : prim
-val i_ticket_deprecated : prim
-val i_read_ticket : prim
-val i_split_ticket : prim
-val i_join_tickets : prim
-val i_open_chest : prim
-val i_emit : prim
-val i_bytes : prim
-val i_nat : prim
+val i_pack : t
+val i_unpack : t
+val i_blake2b : t
+val i_sha256 : t
+val i_sha512 : t
+val i_abs : t
+val i_add : t
+val i_amount : t
+val i_and : t
+val i_balance : t
+val i_car : t
+val i_cdr : t
+val i_chain_id : t
+val i_check_signature : t
+val i_compare : t
+val i_concat : t
+val i_cons : t
+val i_create_account : t
+val i_create_contract : t
+val i_implicit_account : t
+val i_dip : t
+val i_drop : t
+val i_dup : t
+val i_view : t
+val i_ediv : t
+val i_empty_big_map : t
+val i_empty_map : t
+val i_empty_set : t
+val i_eq : t
+val i_exec : t
+val i_apply : t
+val i_failwith : t
+val i_ge : t
+val i_get : t
+val i_get_and_update : t
+val i_gt : t
+val i_hash_key : t
+val i_if : t
+val i_if_cons : t
+val i_if_left : t
+val i_if_none : t
+val i_int : t
+val i_lambda : t
+val i_lambda_rec : t
+val i_le : t
+val i_left : t
+val i_level : t
+val i_loop : t
+val i_lsl : t
+val i_lsr : t
+val i_lt : t
+val i_map : t
+val i_mem : t
+val i_mul : t
+val i_neg : t
+val i_neq : t
+val i_nil : t
+val i_none : t
+val i_not : t
+val i_now : t
+val i_min_block_time : t
+val i_or : t
+val i_pair : t
+val i_unpair : t
+val i_push : t
+val i_right : t
+val i_size : t
+val i_some : t
+val i_source : t
+val i_sender : t
+val i_self : t
+val i_self_address : t
+val i_slice : t
+val i_steps_to_quota : t
+val i_sub : t
+val i_sub_mutez : t
+val i_swap : t
+val i_transfer_tokens : t
+val i_set_delegate : t
+val i_unit : t
+val i_update : t
+val i_xor : t
+val i_iter : t
+val i_loop_left : t
+val i_address : t
+val i_contract : t
+val i_isnat : t
+val i_cast : t
+val i_rename : t
+val i_sapling_empty_state : t
+val i_sapling_verify_update : t
+val i_dig : t
+val i_dug : t
+val i_never : t
+val i_voting_power : t
+val i_total_voting_power : t
+val i_keccak : t
+val i_sha3 : t
+val i_pairing_check : t
+val i_ticket : t
+val i_ticket_deprecated : t
+val i_read_ticket : t
+val i_split_ticket : t
+val i_join_tickets : t
+val i_open_chest : t
+val i_emit : t
+val i_bytes : t
+val i_nat : t
 
 (** {2 Types primitives} *)
 
-val t_bool : prim
-val t_contract : prim
-val t_int : prim
-val t_key : prim
-val t_key_hash : prim
-val t_lambda : prim
-val t_list : prim
-val t_map : prim
-val t_big_map : prim
-val t_nat : prim
-val t_option : prim
-val t_or : prim
-val t_pair : prim
-val t_set : prim
-val t_signature : prim
-val t_string : prim
-val t_bytes : prim
-val t_mutez : prim
-val t_timestamp : prim
-val t_unit : prim
-val t_operation : prim
-val t_address : prim
-val t_tx_rollup_l2_address : prim
-val t_sapling_state : prim
-val t_sapling_transaction : prim
-val t_sapling_transaction_deprecated : prim
-val t_chain_id : prim
-val t_never : prim
-val t_bls12_381_g1 : prim
-val t_bls12_381_g2 : prim
-val t_bls12_381_fr : prim
-val t_ticket : prim
-val t_chest_key : prim
-val t_chest : prim
+val t_bool : t
+val t_contract : t
+val t_int : t
+val t_key : t
+val t_key_hash : t
+val t_lambda : t
+val t_list : t
+val t_map : t
+val t_big_map : t
+val t_nat : t
+val t_option : t
+val t_or : t
+val t_pair : t
+val t_set : t
+val t_signature : t
+val t_string : t
+val t_bytes : t
+val t_mutez : t
+val t_timestamp : t
+val t_unit : t
+val t_operation : t
+val t_address : t
+val t_tx_rollup_l2_address : t
+val t_sapling_state : t
+val t_sapling_transaction : t
+val t_sapling_transaction_deprecated : t
+val t_chain_id : t
+val t_never : t
+val t_bls12_381_g1 : t
+val t_bls12_381_g2 : t
+val t_bls12_381_fr : t
+val t_ticket : t
+val t_chest_key : t
+val t_chest : t
 
 (** {2 Constant Hash primitive} *)
 
-val h_constant : prim
+val h_constant : t
 
 (** {1 Additional features} *)
 
-(** [namespace prim] returns the corresponding namespace from a {!type:prim}. *)
-val namespace : prim -> Namespace.t
+(** [namespace prim] returns the corresponding namespace from a {!type:t}. *)
+val namespace : t -> Namespace.t
 
 (** [prim_to_string prim] returns a prim as a string. *)
-val prim_to_string : prim -> string
+val to_string : t -> string
 
-(** Equality between {!type:prim}. *)
-val prim_equal : prim -> prim -> bool
+(** Equality between {!type:t}. *)
+val equal : t -> t -> bool
 
-(** Pretty printer for {!type:prim}. *)
-val prim_pp : Format.formatter -> prim -> unit
+(** Pretty printer for {!type:t}. *)
+val pp : Format.formatter -> t -> unit
 
-(** Data encoding for {!type:prim}. *)
-val prim_encoding : prim Data_encoding.t
+(** Data encoding for {!type:t}. *)
+val encoding : t Data_encoding.t

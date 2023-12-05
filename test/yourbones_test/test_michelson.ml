@@ -25,11 +25,11 @@ open Nightmare_test
 
 let michelson_testable =
   Alcotest.testable
-    (Micheline.Canonical.pp Michelson.prim_pp)
-    (Micheline.Canonical.equal Michelson.prim_equal)
+    (Micheline.Canonical.pp Michelson.pp)
+    (Micheline.Canonical.equal Michelson.equal)
 ;;
 
-let michelson_encoding = Micheline.canonical_encoding Michelson.prim_encoding
+let michelson_encoding = Micheline.canonical_encoding Michelson.encoding
 
 let test_dummy_json_decoding =
   test_equality

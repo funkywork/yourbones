@@ -57,6 +57,7 @@ module Keyword : sig
     | View
 
   val to_string : t -> string
+  val equal : t -> t -> bool
 end
 
 (** Describes the Constant Michelson Primitives. *)
@@ -75,6 +76,7 @@ module Constant : sig
     | Lambda_rec
 
   val to_string : t -> string
+  val equal : t -> t -> bool
 end
 
 (** Describes the Constant Michelson Primitives. *)
@@ -191,6 +193,7 @@ module Instruction : sig
     | Nat
 
   val to_string : t -> string
+  val equal : t -> t -> bool
 end
 
 (** Describes the Type Michelson Primitives. *)
@@ -233,6 +236,7 @@ module Type : sig
     | Chest
 
   val to_string : t -> string
+  val equal : t -> t -> bool
 end
 
 (** The full set of Michelson primitives. *)
@@ -427,3 +431,9 @@ val namespace : prim -> Namespace.t
 
 (** [prim_to_string prim] returns a prim as a string. *)
 val prim_to_string : prim -> string
+
+(** Equality between {!type:prim}. *)
+val prim_equal : prim -> prim -> bool
+
+(** Pretty printer for {!type:prim}. *)
+val prim_pp : Format.formatter -> prim -> unit

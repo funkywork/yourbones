@@ -42,6 +42,12 @@ module Keyword = struct
     | Code -> "code"
     | View -> "view"
   ;;
+
+  let equal a b =
+    match a, b with
+    | Parameter, Parameter | Storage, Storage | Code, Code | View, View -> true
+    | _ -> false
+  ;;
 end
 
 module Constant = struct
@@ -68,6 +74,21 @@ module Constant = struct
     | Pair -> "Pair"
     | Unit -> "Unit"
     | Lambda_rec -> "Lambda_rec"
+  ;;
+
+  let equal a b =
+    match a, b with
+    | True, True
+    | False, False
+    | Elt, Elt
+    | Left, Left
+    | Right, Right
+    | None, None
+    | Some, Some
+    | Pair, Pair
+    | Unit, Unit
+    | Lambda_rec, Lambda_rec -> true
+    | _ -> false
   ;;
 end
 
@@ -292,6 +313,119 @@ module Instruction = struct
     | Bytes -> "BYTES"
     | Nat -> "NAT"
   ;;
+
+  let equal a b =
+    match a, b with
+    | Pack, Pack
+    | Unpack, Unpack
+    | Blake2b, Blake2b
+    | Sha256, Sha256
+    | Sha512, Sha512
+    | Abs, Abs
+    | Add, Add
+    | Amount, Amount
+    | And, And
+    | Balance, Balance
+    | Car, Car
+    | Cdr, Cdr
+    | Chain_id, Chain_id
+    | Check_signature, Check_signature
+    | Compare, Compare
+    | Concat, Concat
+    | Cons, Cons
+    | Create_account, Create_account
+    | Create_contract, Create_contract
+    | Implicit_account, Implicit_account
+    | Dip, Dip
+    | Drop, Drop
+    | Dup, Dup
+    | View, View
+    | Ediv, Ediv
+    | Empty_big_map, Empty_big_map
+    | Empty_map, Empty_map
+    | Empty_set, Empty_set
+    | Eq, Eq
+    | Exec, Exec
+    | Apply, Apply
+    | Failwith, Failwith
+    | Ge, Ge
+    | Get, Get
+    | Get_and_update, Get_and_update
+    | Gt, Gt
+    | Hash_key, Hash_key
+    | If, If
+    | If_cons, If_cons
+    | If_left, If_left
+    | If_none, If_none
+    | Int, Int
+    | Lambda, Lambda
+    | Lambda_rec, Lambda_rec
+    | Le, Le
+    | Left, Left
+    | Level, Level
+    | Loop, Loop
+    | Lsl, Lsl
+    | Lsr, Lsr
+    | Lt, Lt
+    | Map, Map
+    | Mem, Mem
+    | Mul, Mul
+    | Neg, Neg
+    | Neq, Neq
+    | Nil, Nil
+    | None, None
+    | Not, Not
+    | Now, Now
+    | Min_block_time, Min_block_time
+    | Or, Or
+    | Pair, Pair
+    | Unpair, Unpair
+    | Push, Push
+    | Right, Right
+    | Size, Size
+    | Some, Some
+    | Source, Source
+    | Sender, Sender
+    | Self, Self
+    | Self_address, Self_address
+    | Slice, Slice
+    | Steps_to_quota, Steps_to_quota
+    | Sub, Sub
+    | Sub_mutez, Sub_mutez
+    | Swap, Swap
+    | Transfer_tokens, Transfer_tokens
+    | Set_delegate, Set_delegate
+    | Unit, Unit
+    | Update, Update
+    | Xor, Xor
+    | Iter, Iter
+    | Loop_left, Loop_left
+    | Address, Address
+    | Contract, Contract
+    | Isnat, Isnat
+    | Cast, Cast
+    | Rename, Rename
+    | Sapling_empty_state, Sapling_empty_state
+    | Sapling_verify_update, Sapling_verify_update
+    | Dig, Dig
+    | Dug, Dug
+    | Never, Never
+    | Voting_power, Voting_power
+    | Total_voting_power, Total_voting_power
+    | Keccak, Keccak
+    | Sha3, Sha3
+    | Pairing_check, Pairing_check
+    | Ticket, Ticket
+    | Ticket_deprecated, Ticket_deprecated
+    | Read_ticket, Read_ticket
+    | Split_ticket, Split_ticket
+    | Join_tickets, Join_tickets
+    | Open_chest, Open_chest
+    | Emit, Emit
+    | Bytes, Bytes
+    | Nat, Nat -> true
+    | _ -> false
+  ;;
 end
 
 module Type = struct
@@ -366,6 +500,45 @@ module Type = struct
     | Ticket -> "ticket"
     | Chest_key -> "chest_key"
     | Chest -> "chest"
+  ;;
+
+  let equal a b =
+    match a, b with
+    | Bool, Bool
+    | Contract, Contract
+    | Int, Int
+    | Key, Key
+    | Key_hash, Key_hash
+    | Lambda, Lambda
+    | List, List
+    | Map, Map
+    | Big_map, Big_map
+    | Nat, Nat
+    | Option, Option
+    | Or, Or
+    | Pair, Pair
+    | Set, Set
+    | Signature, Signature
+    | String, String
+    | Bytes, Bytes
+    | Mutez, Mutez
+    | Timestamp, Timestamp
+    | Unit, Unit
+    | Operation, Operation
+    | Address, Address
+    | Tx_rollup_l2_address, Tx_rollup_l2_address
+    | Sapling_state, Sapling_state
+    | Sapling_transaction, Sapling_transaction
+    | Sapling_transaction_deprecated, Sapling_transaction_deprecated
+    | Chain_id, Chain_id
+    | Never, Never
+    | Bls12_381_g1, Bls12_381_g1
+    | Bls12_381_g2, Bls12_381_g2
+    | Bls12_381_fr, Bls12_381_fr
+    | Ticket, Ticket
+    | Chest_key, Chest_key
+    | Chest, Chest -> true
+    | _ -> false
   ;;
 end
 
@@ -549,3 +722,15 @@ let prim_to_string = function
   | Type typ -> Type.to_string typ
   | Constant_hash -> "constant"
 ;;
+
+let prim_equal a b =
+  match a, b with
+  | Keyword a, Keyword b -> Keyword.equal a b
+  | Constant a, Constant b -> Constant.equal a b
+  | Instruction a, Instruction b -> Instruction.equal a b
+  | Type a, Type b -> Type.equal a b
+  | Constant_hash, Constant_hash -> true
+  | _ -> false
+;;
+
+let prim_pp ppf x = Format.fprintf ppf "%s" (prim_to_string x)

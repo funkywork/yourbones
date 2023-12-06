@@ -31,3 +31,5 @@ module Chain_id = Chain_id
 module Block_id = Block_id
 module Block_header = Block_header
 module RPC = Rpc
+module Micheline = Micheline
+module Michelson = Michelson

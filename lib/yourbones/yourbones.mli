@@ -30,11 +30,13 @@
     Exposes all recurring types that are often used (such as [tez]). *)
 
 type tez = Tez.t
+type nat = Nat.t
 type network_type = Network.Type.t
 
 (** {1 Tezos related modules} *)
 
 module Tez = Tez
+module Nat = Nat
 module Address = Address
 module Block_hash = Block_hash
 module Chain_id = Chain_id

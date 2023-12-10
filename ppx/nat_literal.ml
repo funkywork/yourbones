@@ -20,35 +20,27 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-(** the [Yourbones] module exposes all backend agnostic tools (e.g. as a node,
-    to build an indexer or JavaScript to build the front-end of a dApp).
+open Yourbones
+open Ppxlib
+open Ast_helper
 
-    It is mainly used to describe data to interact with the chain. *)
+let from_nat_repr value =
+  let nat = Nat.to_int64 value in
+  let path = Util.(~:"Yourbones" >> "Nat" >> "abs_64") in
+  let value = nat |> Const.int64 |> Exp.constant in
+  Util.application path [ value ]
+;;
 
-(** {1 Common types}
+let fail_with_error ?location str =
+  Util.fail_with ?location {|"%s" projection into Natural impossible|} str
+;;
 
-    Exposes all recurring types that are often used (such as [tez]). *)
+let from_string str =
+  match Nat.from_string str with
+  | None -> fail_with_error str
+  | Some value -> from_nat_repr value
+;;
 
-type tez = Tez.t
-type nat = Nat.t
-type network_type = Network.Type.t
-
-(** {1 Tezos related modules} *)
-
-module Tez = Tez
-module Nat = Nat
-module Address = Address
-module Block_hash = Block_hash
-module Chain_id = Chain_id
-module Block_id = Block_id
-module Block_header = Block_header
-
-(** {2 Micheline and Michelson} *)
-
-module Micheline = Micheline
-module Michelson = Michelson
-
-(** {1 Node related modules} *)
-
-module Network = Network
-module RPC = Rpc
+let register =
+  "Yourbones_ppx.nat_literal", Util.[ constant_rule 'N' from_string ]
+;;

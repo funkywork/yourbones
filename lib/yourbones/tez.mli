@@ -36,8 +36,7 @@ type error =
   [ `Tez_negative_amount of int64
   | `Tez_overflow
   | `Tez_invalid_string_representation of string
-  | `Tez_invalid_multiplicator of int64
-  | `Tez_invalid_divisor of int64
+  | `Tez_invalid_divisor of Nat.t
   ]
 
 (** An exception used to lift [error] into an exception. *)
@@ -84,12 +83,7 @@ val to_mutez : t -> int64
 (** [from_mutez x] alias of {!val:Micro.from_int64}. *)
 val from_mutez
   :  int64
-  -> ( t
-     , [> `Tez_negative_amount of int64
-       | `Tez_overflow
-       | `Tez_invalid_multiplicator of int64
-       ] )
-     result
+  -> (t, [> `Tez_negative_amount of int64 | `Tez_overflow ]) result
 
 (** [from_mutez' x] is an exceptionful version of [from_mutez]. *)
 val from_mutez' : int64 -> t
@@ -130,16 +124,13 @@ val add : t -> t -> (t, [> `Tez_overflow ]) result
     substraction reach a negative amount. *)
 val sub : t -> t -> (t, [> `Tez_negative_amount of int64 ]) result
 
-(** [mul x y] is the multiplication of [x] by [y]. The function fails if the [y]
-    is negative or if the result reach the overflow.*)
-val mul
-  :  t
-  -> int64
-  -> (t, [> `Tez_overflow | `Tez_invalid_multiplicator of int64 ]) result
+(** [mul x y] is the multiplication of [x] by [y]. The function fails if the
+    result reach the overflow.*)
+val mul : t -> Nat.t -> (t, [> `Tez_overflow ]) result
 
 (** [div x y] is the division of [x] by [y]. The function fails if the [y] is
-    negative or zero.*)
-val div : t -> int64 -> (t, [> `Tez_invalid_divisor of int64 ]) result
+    null .*)
+val div : t -> Nat.t -> (t, [> `Tez_invalid_divisor of Nat.t ]) result
 
 (** {2 Infix operators} *)
 
@@ -173,13 +164,10 @@ module Infix : sig
   val ( - ) : t -> t -> (t, [> `Tez_negative_amount of int64 ]) result
 
   (** Infix version of {!val:mul}. *)
-  val ( * )
-    :  t
-    -> int64
-    -> (t, [> `Tez_overflow | `Tez_invalid_multiplicator of int64 ]) result
+  val ( * ) : t -> Nat.t -> (t, [> `Tez_overflow ]) result
 
   (** Infix version of {!val:div}. *)
-  val ( / ) : t -> int64 -> (t, [> `Tez_invalid_divisor of int64 ]) result
+  val ( / ) : t -> Nat.t -> (t, [> `Tez_invalid_divisor of Nat.t ]) result
 
   (** {3 Binded arithmetic}
 
@@ -229,13 +217,13 @@ module Infix : sig
     -> (t, 'err) result
 
   (** [x |* y] is [x * y] where [x] is wrapped into a result. *)
-  val ( |* ) : (t, (error as 'err)) result -> int64 -> (t, 'err) result
+  val ( |* ) : (t, (error as 'err)) result -> Nat.t -> (t, 'err) result
 
   (** [x *| y] is [x * y] where [y] is wrapped into a result. *)
-  val ( *| ) : int64 -> (t, (error as 'err)) result -> (t, 'err) result
+  val ( *| ) : Nat.t -> (t, (error as 'err)) result -> (t, 'err) result
 
   (** [x |/ y] is [x / y] where [x] is wrapped into a result. *)
-  val ( |/ ) : (t, (error as 'err)) result -> t -> (t, 'err) result
+  val ( |/ ) : (t, (error as 'err)) result -> Nat.t -> (t, 'err) result
 end
 
 include module type of Infix (** @inline *)

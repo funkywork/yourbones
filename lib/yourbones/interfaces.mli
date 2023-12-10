@@ -44,23 +44,13 @@ module type TEZ = sig
       negative. *)
   val from_int
     :  int
-    -> ( t
-       , [> `Tez_negative_amount of int64
-         | `Tez_overflow
-         | `Tez_invalid_multiplicator of int64
-         ] )
-       result
+    -> (t, [> `Tez_negative_amount of int64 | `Tez_overflow ]) result
 
   (** [from_int x] lift an [int64] into a [t]. The function fails if [x] is
       negative. *)
   val from_int64
     :  int64
-    -> ( t
-       , [> `Tez_negative_amount of int64
-         | `Tez_overflow
-         | `Tez_invalid_multiplicator of int64
-         ] )
-       result
+    -> (t, [> `Tez_negative_amount of int64 | `Tez_overflow ]) result
 
   (** [truncate x] drop the floating part of [x]. *)
   val truncate : t -> t

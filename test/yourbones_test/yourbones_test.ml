@@ -24,6 +24,7 @@ let () =
   Alcotest.run
     "Yourbones.Common"
     [ Test_tez.cases
+    ; Test_nat.cases
     ; Test_address.cases
     ; Test_block_hash.cases
     ; Test_michelson.cases

@@ -21,9 +21,11 @@
     SOFTWARE. *)
 
 type tez = Tez.t
+type nat = Nat.t
 type network_type = Network.Type.t
 
 module Tez = Tez
+module Nat = Nat
 module Network = Network
 module Address = Address
 module Block_hash = Block_hash

@@ -26,8 +26,7 @@ type error =
   [ `Tez_negative_amount of int64
   | `Tez_overflow
   | `Tez_invalid_string_representation of string
-  | `Tez_invalid_multiplicator of int64
-  | `Tez_invalid_divisor of int64
+  | `Tez_invalid_divisor of Nat.t
   ]
 
 exception Tez_exception of error
@@ -46,10 +45,9 @@ let sub x y =
 ;;
 
 let mul x m =
+  let m = Nat.to_int64 m in
   let comparison = Int64.compare m 0L in
-  if comparison < 0
-  then Error (`Tez_invalid_multiplicator m)
-  else if Int.equal comparison 0
+  if Int.equal comparison 0
   then Ok Int64.zero
   else if Int64.compare x Int64.(div max_int m) > 0
   then Error `Tez_overflow
@@ -57,9 +55,10 @@ let mul x m =
 ;;
 
 let div x d =
-  if Int64.compare d 0L <= 0
+  let nd = Nat.to_int64 d in
+  if Int64.compare nd 0L <= 0
   then Error (`Tez_invalid_divisor d)
-  else Ok (Int64.div x d)
+  else Ok (Int64.div x nd)
 ;;
 
 module Make
@@ -70,12 +69,7 @@ module Make
 
        val from_int64
          :  int64
-         -> ( t
-            , [> `Tez_negative_amount of int64
-              | `Tez_overflow
-              | `Tez_invalid_multiplicator of int64
-              ] )
-            result
+         -> (t, [> `Tez_negative_amount of int64 | `Tez_overflow ]) result
      end)
     (Current : sig
        val one : Previous.t
@@ -84,7 +78,12 @@ struct
   type t = int64
 
   let one = Int64.mul Current.one Previous.one
-  let from_int64 x = Result.bind (Previous.from_int64 x) (mul Current.one)
+
+  let from_int64 x =
+    Result.bind (Previous.from_int64 x) (fun x ->
+      mul Current.one (Nat.abs_64 x))
+  ;;
+
   let from_int x = from_int64 (Int64.of_int x)
   let truncate x = Int64.div x one
   let succ x = add x one
@@ -236,16 +235,14 @@ let pp_error ppf = function
   | `Tez_overflow -> Format.fprintf ppf "`Tez_overflow"
   | `Tez_invalid_string_representation s ->
     Format.fprintf ppf "`Tez_invalid_string_representation (\"%s\")" s
-  | `Tez_invalid_multiplicator x ->
-    Format.fprintf ppf "`Tez_invalid_multiplicator (%Li)" x
-  | `Tez_invalid_divisor x -> Format.fprintf ppf "`Tez_invalid_divisor (%Li)" x
+  | `Tez_invalid_divisor x ->
+    Format.fprintf ppf "`Tez_invalid_divisor (%a)" Nat.pp x
 ;;
 
 let equal_error a b =
   match a, b with
-  | `Tez_negative_amount x, `Tez_negative_amount y
-  | `Tez_invalid_multiplicator x, `Tez_invalid_multiplicator y
-  | `Tez_invalid_divisor x, `Tez_invalid_divisor y -> Int64.equal x y
+  | `Tez_negative_amount x, `Tez_negative_amount y -> Int64.equal x y
+  | `Tez_invalid_divisor x, `Tez_invalid_divisor y -> Nat.equal x y
   | `Tez_overflow, `Tez_overflow -> true
   | `Tez_invalid_string_representation x, `Tez_invalid_string_representation y
     -> String.equal x y

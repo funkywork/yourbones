@@ -331,7 +331,7 @@ let test_mul_succeed =
       and computed =
         let open Result.Syntax in
         let* a = Tez.from_int 22 in
-        let b = 10L in
+        let b = Nat.abs_64 10L in
         Tez.mul a b
       in
       expected, computed)
@@ -347,23 +347,7 @@ let test_mul_micro_succeed =
       and computed =
         let open Result.Syntax in
         let* a = Tez.Micro.from_int 22 in
-        let b = 10L in
-        Tez.mul a b
-      in
-      expected, computed)
-;;
-
-let test_mul_negative_multiplicator =
-  test_equality
-    ~about:"mul"
-    ~desc:"test mul invalid multiplicator"
-    (Alcotest.result tez_testable tez_error_testable)
-    (fun () ->
-      let expected = Error (`Tez_invalid_multiplicator (-2L))
-      and computed =
-        let open Result.Syntax in
-        let* a = Tez.from_int 22 in
-        let b = -2L in
+        let b = Nat.abs_64 10L in
         Tez.mul a b
       in
       expected, computed)
@@ -379,7 +363,7 @@ let test_mul_overflow =
       and computed =
         let open Result.Syntax in
         let* a = Tez.from_int64 Int64.(div max_int 2L |> succ) in
-        let b = 2L in
+        let b = Nat.abs_64 2L in
         Tez.mul a b
       in
       expected, computed)
@@ -395,7 +379,7 @@ let test_div_valid =
       and computed =
         let open Result.Syntax in
         let* a = Tez.from_int 420 in
-        let b = 2L in
+        let b = Nat.abs_64 2L in
         Tez.div a b
       in
       expected, computed)
@@ -407,27 +391,11 @@ let test_div_with_null_divisor =
     ~desc:"test div with null division"
     (Alcotest.result tez_testable tez_error_testable)
     (fun () ->
-      let expected = Error (`Tez_invalid_divisor 0L)
+      let expected = Error (`Tez_invalid_divisor Nat.zero)
       and computed =
         let open Result.Syntax in
         let* a = Tez.from_int 420 in
-        let b = 0L in
-        Tez.div a b
-      in
-      expected, computed)
-;;
-
-let test_div_with_negative_divisor =
-  test_equality
-    ~about:"div"
-    ~desc:"test div with negative division"
-    (Alcotest.result tez_testable tez_error_testable)
-    (fun () ->
-      let expected = Error (`Tez_invalid_divisor (-30L))
-      and computed =
-        let open Result.Syntax in
-        let* a = Tez.from_int 420 in
-        let b = -30L in
+        let b = Nat.zero in
         Tez.div a b
       in
       expected, computed)
@@ -569,11 +537,9 @@ let cases =
     ; test_sub_with_underflow
     ; test_mul_succeed
     ; test_mul_micro_succeed
-    ; test_mul_negative_multiplicator
     ; test_mul_overflow
     ; test_div_valid
     ; test_div_with_null_divisor
-    ; test_div_with_negative_divisor
     ; test_from_string_1
     ; test_from_string_2
     ; test_from_string_3

@@ -3,7 +3,6 @@
 
 ;; Project configuration
 (name yourbones)
-(version dev)
 (generate_opam_files true)
 
 ;; Project description
@@ -20,7 +19,6 @@
  (description "A companion library for writing dApps in OCaml that should fit with Nightmare")
  (depends
   (ocaml (>= 5.0.0))
-  (dune (>= 3.0.0))
   (data-encoding (>= 0.7.1))
   (digestif (>= 1.1.0))
   preface
@@ -28,7 +26,6 @@
   tezos-base58
   (nightmare :pinned)
   (nightmare-test (and :pinned :with-test))
-  (odoc :with-doc)
   (alcotest :with-test)))
 
 (package
@@ -37,7 +34,6 @@
  (description "Some syntax extension to deal with Tezos values")
  (depends
   (ocaml (>= 5.0.0))
-  (dune (>= 3.0.0))
   (ppxlib (>= 0.29.1))
   (yourbones (= :version))
   (mdx (and :with-test (>= 2.0.0)))))
@@ -48,7 +44,6 @@
   (description "JavaScript runtime to exploit data described by the Yourbones library and interact with Tezos RPCs")
   (depends
    (ocaml (>= 5.0.0))
-   (dune (>= 3.0.0))
    (lwt (>= 5.6.1))
    (preface (>= 1.0.0))
    (js_of_ocaml-compiler (>= 5.3.0))
@@ -65,7 +60,6 @@
   (description "An attempt to progressively link the Beacon SDK (TZIP-10) to interact with Wallets in a dApp")
   (depends
    (ocaml (>= 5.0.0))
-   (dune (>= 3.0.0))
    (lwt (>= 5.6.1))
    (preface (>= 1.0.0))
    (js_of_ocaml-compiler (>= 5.3.0))

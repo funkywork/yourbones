@@ -20,8 +20,27 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-let () =
-  List.iter
-    (fun (name, rules) -> Ppxlib.Driver.register_transformation name ~rules)
-    [ Tez_literal.register; Nat_literal.register; Address_literal.register ]
+open Yourbones
+open Ppxlib
+open Ast_helper
+
+let from_nat_repr value =
+  let nat = Nat.to_int64 value in
+  let path = Util.(~:"Yourbones" >> "Nat" >> "abs_64") in
+  let value = nat |> Const.int64 |> Exp.constant in
+  Util.application path [ value ]
+;;
+
+let fail_with_error ?location str =
+  Util.fail_with ?location {|"%s" projection into Natural impossible|} str
+;;
+
+let from_string str =
+  match Nat.from_string str with
+  | None -> fail_with_error str
+  | Some value -> from_nat_repr value
+;;
+
+let register =
+  "Yourbones_ppx.nat_literal", Util.[ constant_rule 'N' from_string ]
 ;;

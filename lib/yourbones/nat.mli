@@ -128,8 +128,14 @@ val bounded_sub : t -> t -> t
 (** [mul x y] multiplication between two [nats]. *)
 val mul : t -> t -> t
 
-(** [ediv x y] euclidean division between two [nat]. *)
-val ediv : t -> t -> (t * t) option
+(** [ediv x y] euclidian division between two [nats]. *)
+val ediv : t -> t -> t option
+
+(** [rem x y] euclidian division remainder between two [nats]. *)
+val rem : t -> t -> t option
+
+(** [ediv x y] euclidean division between two [nat] with the [remainer]. *)
+val ediv_rem : t -> t -> (t * t) option
 
 (** {1 Pretty printers} *)
 

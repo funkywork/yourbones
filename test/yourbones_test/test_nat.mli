@@ -20,13 +20,8 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE. *)
 
-let () =
-  Alcotest.run
-    "Yourbones.Common"
-    [ Test_tez.cases
-    ; Test_nat.cases
-    ; Test_address.cases
-    ; Test_block_hash.cases
-    ; Test_michelson.cases
-    ]
-;;
+(** The presence of an [mli] file may seem a bit excessive, but it is mainly to
+    quickly identify unused tests. *)
+
+(** List of all test-cases. *)
+val cases : string * unit Alcotest.test_case list

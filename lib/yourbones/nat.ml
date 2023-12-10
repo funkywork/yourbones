@@ -23,8 +23,8 @@
 type t = Z.t
 
 let from_int x = if x < 0 then None else Some (Z.of_int x)
-let from_int64 x = if Int64.compare 0L x < 0 then None else Some (Z.of_int64 x)
-let from_z x = if Z.compare Z.zero x < 0 then None else Some x
+let from_int64 x = if Int64.compare 0L x > 0 then None else Some (Z.of_int64 x)
+let from_z x = if Z.compare Z.zero x > 0 then None else Some x
 
 let from_string x =
   x |> Int64.of_string_opt |> fun x -> Option.bind x from_int64
@@ -49,7 +49,7 @@ let pred x = Z.pred x
 
 let bounded_pred x =
   let x = Z.pred x in
-  if Z.compare Z.zero x < 0 then zero else x
+  if Z.compare Z.zero x > 0 then zero else x
 ;;
 
 let add x y = Z.(x + y)
@@ -57,10 +57,12 @@ let sub x y = Z.(x - y)
 let bounded_sub x y = if Z.compare y x > 0 then zero else Z.(x - y)
 let mul x y = Z.(x * y)
 
-let ediv x divisor =
+let ediv_rem x divisor =
   if Z.equal divisor zero then None else Some (Z.ediv_rem x divisor)
 ;;
 
+let ediv x y = Option.map fst @@ ediv_rem x y
+let rem x y = Option.map snd @@ ediv_rem x y
 let pp = Z.pp_print
 
 module Infix = struct

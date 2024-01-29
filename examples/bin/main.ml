@@ -42,6 +42,7 @@ let mount client account =
   in
   Lwt_js_events.(async_loop click) btn (fun _ _ ->
     let+ result =
+      let () = Nightmare_js.Console.(string log) "clicked" in
       Dapp_client.request_simple_transaction
         ~destination:[%address "tz1XxRjkB77R1rnxVRGQxmWAcG1cGQQeMAAL"]
         client

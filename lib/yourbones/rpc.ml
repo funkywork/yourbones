@@ -27,10 +27,10 @@ type ('method_, 'encoding, 'continuation, 'witness) entrypoint =
   { encoding : 'encoding Data_encoding.t
   ; endpoint :
       ( [ `Outer ]
-      , 'method_
-      , 'continuation
-      , 'witness )
-      Nightmare_service.wrapped_endpoint
+        , 'method_
+        , 'continuation
+        , 'witness )
+        Nightmare_service.wrapped_endpoint
   }
 
 type ('method_, 'encoding, 'continuation, 'witness) wrapped =

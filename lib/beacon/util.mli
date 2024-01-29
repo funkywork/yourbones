@@ -63,5 +63,5 @@ val list_from_js : 'a Js.js_array Js.t -> 'a list
 
 module List_option :
   Preface.Specs.TRAVERSABLE
-    with type 'a t = 'a option
-     and type 'a iter = 'a list
+  with type 'a t = 'a option
+   and type 'a iter = 'a list

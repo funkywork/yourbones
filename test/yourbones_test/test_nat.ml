@@ -229,9 +229,9 @@ let test_succ =
     ~desc:"compute the successor of a natural"
     nat_testable
     (fun () ->
-      let expected = Nat.abs 12
-      and computed = Nat.abs 10 |> Nat.succ |> Nat.succ in
-      expected, computed)
+       let expected = Nat.abs 12
+       and computed = Nat.abs 10 |> Nat.succ |> Nat.succ in
+       expected, computed)
 ;;
 
 let test_pred_valid =
@@ -277,9 +277,9 @@ let test_bounded_pred_pos =
        negative amount"
     nat_testable
     (fun () ->
-      let expected = Nat.abs 10
-      and computed = Nat.abs 12 |> Nat.bounded_pred |> Nat.bounded_pred in
-      expected, computed)
+       let expected = Nat.abs 10
+       and computed = Nat.abs 12 |> Nat.bounded_pred |> Nat.bounded_pred in
+       expected, computed)
 ;;
 
 let test_bounded_pred_neg =
@@ -290,9 +290,9 @@ let test_bounded_pred_neg =
        amount"
     nat_testable
     (fun () ->
-      let expected = Nat.zero
-      and computed = Nat.abs 1 |> Nat.bounded_pred |> Nat.bounded_pred in
-      expected, computed)
+       let expected = Nat.zero
+       and computed = Nat.abs 1 |> Nat.bounded_pred |> Nat.bounded_pred in
+       expected, computed)
 ;;
 
 let test_some_addition_and_multiplication =
@@ -301,9 +301,9 @@ let test_some_addition_and_multiplication =
     ~desc:"Compute some arithmetic operation using add and mul"
     nat_testable
     (fun () ->
-      let expected = Nat.abs 310
-      and computed = Nat.(((abs 10 + abs 20) * abs 10) + (abs 5 * abs 2)) in
-      expected, computed)
+       let expected = Nat.abs 310
+       and computed = Nat.(((abs 10 + abs 20) * abs 10) + (abs 5 * abs 2)) in
+       expected, computed)
 ;;
 
 let test_some_addition_and_multiplication_and_bounded_sub =
@@ -312,11 +312,11 @@ let test_some_addition_and_multiplication_and_bounded_sub =
     ~desc:"Compute some arithmetic operation using add and mul and bounded_sub"
     nat_testable
     (fun () ->
-      let expected = Nat.abs 10
-      and computed =
-        Nat.(((abs 10 + abs 20) * abs 10) + (abs 5 * abs 2) -^ abs 300)
-      in
-      expected, computed)
+       let expected = Nat.abs 10
+       and computed =
+         Nat.(((abs 10 + abs 20) * abs 10) + (abs 5 * abs 2) -^ abs 300)
+       in
+       expected, computed)
 ;;
 
 let test_ediv_rem_with_valid_divisor =
@@ -421,9 +421,9 @@ let test_bounded_sub_pos =
        not reach 0"
     nat_testable
     (fun () ->
-      let expected = Nat.abs 10
-      and computed = Nat.(bounded_sub (abs 13) (abs 3)) in
-      expected, computed)
+       let expected = Nat.abs 10
+       and computed = Nat.(bounded_sub (abs 13) (abs 3)) in
+       expected, computed)
 ;;
 
 let test_bounded_sub_neg =
@@ -434,9 +434,9 @@ let test_bounded_sub_neg =
        be 0"
     nat_testable
     (fun () ->
-      let expected = Nat.zero
-      and computed = Nat.(bounded_sub (abs 2) (abs 3)) in
-      expected, computed)
+       let expected = Nat.zero
+       and computed = Nat.(bounded_sub (abs 2) (abs 3)) in
+       expected, computed)
 ;;
 
 let test_gt_t =

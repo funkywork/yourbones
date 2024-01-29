@@ -38,13 +38,14 @@ val call
   -> ?keepalive:bool
   -> node_address:string
   -> ( Nightmare_service.Method.t
-     , 'encoding
-     , 'continuation
-     , ( 'encoding
-       , [> `Json_error of string | `Json_exn of exn | `Http_error of int ] )
-       result
-       Lwt.t )
-     Yourbones.RPC.wrapped
+       , 'encoding
+       , 'continuation
+       , ( 'encoding
+           , [> `Json_error of string | `Json_exn of exn | `Http_error of int ]
+           )
+           result
+           Lwt.t )
+       Yourbones.RPC.wrapped
   -> 'continuation
 
 (** [stream ~on_chunk ~node_address ~entrypoint] stream an entrypoint (ie: head
@@ -55,15 +56,15 @@ val stream
        | `Raise of
          exn
          -> ( unit
-            , ([> `Json_error of string
-               | `Json_exn of exn
-               | `Http_error of int
-               | `On_chunk of 'new_errors
-               ]
-               as
-               'errors) )
-            result
-            Lwt.t > `Restart_after
+              , ([> `Json_error of string
+                 | `Json_exn of exn
+                 | `Http_error of int
+                 | `On_chunk of 'new_errors
+                 ]
+                 as
+                 'errors) )
+              result
+              Lwt.t > `Restart_after
        ]
   -> ?parameters:(string * string) list
   -> ?headers:Nightmare_js.Headers.t
@@ -79,8 +80,8 @@ val stream
   -> on_chunk:('encoding -> (unit, 'new_errors) result Lwt.t)
   -> node_address:string
   -> ( Nightmare_service.Method.t
-     , 'encoding
-     , 'continuation
-     , (unit, 'errors) result Lwt.t )
-     Yourbones.RPC.wrapped
+       , 'encoding
+       , 'continuation
+       , (unit, 'errors) result Lwt.t )
+       Yourbones.RPC.wrapped
   -> 'continuation

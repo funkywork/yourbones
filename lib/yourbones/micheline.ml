@@ -199,8 +199,8 @@ let canonical_encoding prim_encoding =
       (obj1 (req "int" z))
       ~title:"Int"
       (function
-       | Int (_, x) -> Some x
-       | _ -> None)
+        | Int (_, x) -> Some x
+        | _ -> None)
       (fun x -> Int (0, x))
   in
   let string_encoding tag =
@@ -209,8 +209,8 @@ let canonical_encoding prim_encoding =
       (obj1 (req "string" string))
       ~title:"String"
       (function
-       | String (_, x) -> Some x
-       | _ -> None)
+        | String (_, x) -> Some x
+        | _ -> None)
       (fun x -> String (0, x))
   in
   let bytes_encoding tag =
@@ -219,8 +219,8 @@ let canonical_encoding prim_encoding =
       (obj1 (req "bytes" bytes))
       ~title:"bytes"
       (function
-       | Bytes (_, x) -> Some x
-       | _ -> None)
+        | Bytes (_, x) -> Some x
+        | _ -> None)
       (fun x -> Bytes (0, x))
   in
   let seq_encoding tag fixpoint =
@@ -229,8 +229,8 @@ let canonical_encoding prim_encoding =
       (list fixpoint)
       ~title:"Sequence"
       (function
-       | Seq (_, x) -> Some x
-       | _ -> None)
+        | Seq (_, x) -> Some x
+        | _ -> None)
       (fun x -> Seq (0, x))
   in
   let annots_encoding =
@@ -248,8 +248,8 @@ let canonical_encoding prim_encoding =
          (dft "args" (list fixpoint) [])
          (dft "annots" annots_encoding []))
       (function
-       | Prim (_, prim, args, annots) -> Some (prim, args, annots)
-       | _ -> None)
+        | Prim (_, prim, args, annots) -> Some (prim, args, annots)
+        | _ -> None)
       (fun (prim, args, annots) -> Prim (0, prim, args, annots))
   in
   let node_encoding =
@@ -277,8 +277,8 @@ let canonical_encoding prim_encoding =
                  ~title:"Prim__no_args__no_annots"
                  (obj1 (req "prim" prim_encoding))
                  (function
-                  | Prim (_, x, [], []) -> Some x
-                  | _ -> None)
+                   | Prim (_, x, [], []) -> Some x
+                   | _ -> None)
                  (fun x -> Prim (0, x, [], []))
              ; case
                  (Tag 4)
@@ -287,16 +287,16 @@ let canonical_encoding prim_encoding =
                     (req "prim" prim_encoding)
                     (req "annots" annots_encoding))
                  (function
-                  | Prim (_, x, [], annots) -> Some (x, annots)
-                  | _ -> None)
+                   | Prim (_, x, [], annots) -> Some (x, annots)
+                   | _ -> None)
                  (fun (x, annots) -> Prim (0, x, [], annots))
              ; case
                  (Tag 5)
                  ~title:"Prim__1_args__no_annots"
                  (obj2 (req "prim" prim_encoding) (req "arg" fixpoint))
                  (function
-                  | Prim (_, x, [ arg ], []) -> Some (x, arg)
-                  | _ -> None)
+                   | Prim (_, x, [ arg ], []) -> Some (x, arg)
+                   | _ -> None)
                  (fun (x, arg) -> Prim (0, x, [ arg ], []))
              ; case
                  (Tag 6)
@@ -306,8 +306,8 @@ let canonical_encoding prim_encoding =
                     (req "arg" fixpoint)
                     (req "annots" annots_encoding))
                  (function
-                  | Prim (_, x, [ arg ], annots) -> Some (x, arg, annots)
-                  | _ -> None)
+                   | Prim (_, x, [ arg ], annots) -> Some (x, arg, annots)
+                   | _ -> None)
                  (fun (x, arg, annots) -> Prim (0, x, [ arg ], annots))
              ; case
                  (Tag 7)
@@ -317,8 +317,8 @@ let canonical_encoding prim_encoding =
                     (req "arg1" fixpoint)
                     (req "arg2" fixpoint))
                  (function
-                  | Prim (_, x, [ arg1; arg2 ], []) -> Some (x, arg1, arg2)
-                  | _ -> None)
+                   | Prim (_, x, [ arg1; arg2 ], []) -> Some (x, arg1, arg2)
+                   | _ -> None)
                  (fun (x, arg1, arg2) -> Prim (0, x, [ arg1; arg2 ], []))
              ; case
                  (Tag 8)
@@ -329,9 +329,9 @@ let canonical_encoding prim_encoding =
                     (req "arg2" fixpoint)
                     (req "annots" annots_encoding))
                  (function
-                  | Prim (_, x, [ arg1; arg2 ], annots) ->
-                    Some (x, arg1, arg2, annots)
-                  | _ -> None)
+                   | Prim (_, x, [ arg1; arg2 ], annots) ->
+                     Some (x, arg1, arg2, annots)
+                   | _ -> None)
                  (fun (x, arg1, arg2, annots) ->
                    Prim (0, x, [ arg1; arg2 ], annots))
                (* General cases *)

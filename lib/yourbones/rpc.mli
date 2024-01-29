@@ -110,10 +110,10 @@ val encoding_of
 val endpoint_of
   :  (Nightmare_service.Method.t, 'encoding, 'continuation, 'witness) entrypoint
   -> ( [ `Outer ]
-     , Nightmare_service.Method.t
-     , 'continuation
-     , 'witness )
-     Nightmare_service.wrapped_endpoint
+       , Nightmare_service.Method.t
+       , 'continuation
+       , 'witness )
+       Nightmare_service.wrapped_endpoint
 
 (** {1 Infix operators}
 
@@ -150,10 +150,10 @@ module Directory : sig
       [/chains/<chain_id>/blocks/<block_id>/context/contracts/<contract_id>/balance (GET)] *)
   val get_balance
     : ( [> `GET ]
-      , Tez.t
-      , Chain_id.t -> Block_id.t -> Address.t -> 'witness
-      , 'witness )
-      wrapped
+        , Tez.t
+        , Chain_id.t -> Block_id.t -> Address.t -> 'witness
+        , 'witness )
+        wrapped
 
   (** [monitor_heads ~node_address] describes the entrypoint
       [GET /monitor/heads/<chain_id> (GET)] *)
